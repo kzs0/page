@@ -14,11 +14,11 @@ class TorusBackground {
             return;
         }
 
-        // Torus parameters
-        this.torusR = 1.0;        // Major radius
-        this.torusr = 0.35;       // Minor radius
-        this.segments = 64;       // Segments around torus
-        this.tubes = 32;          // Tubes in cross-section
+        // Torus parameters - larger for better visibility
+        this.torusR = 1.2;        // Major radius
+        this.torusr = 0.4;        // Minor radius
+        this.segments = 48;       // Segments around torus
+        this.tubes = 24;          // Tubes in cross-section
 
         // Animation state
         this.time = 0;
@@ -42,7 +42,10 @@ class TorusBackground {
 
         // Network traffic particles
         this.trafficParticles = [];
-        this.particleCount = this.isMobile() ? 80 : 150;
+        this.particleCount = this.isMobile() ? 60 : 120;
+
+        // Track initialization success
+        this.initialized = false;
 
         this.init();
     }
@@ -52,12 +55,20 @@ class TorusBackground {
     }
 
     init() {
-        this.resize();
-        this.createTorusGeometry();
-        this.createTrafficParticles();
-        this.createShaders();
-        this.bindEvents();
-        this.animate();
+        try {
+            this.resize();
+            this.createTorusGeometry();
+            this.createTrafficParticles();
+            if (!this.createShaders()) {
+                console.error('Failed to create shaders');
+                return;
+            }
+            this.bindEvents();
+            this.initialized = true;
+            this.animate();
+        } catch (e) {
+            console.error('TorusBackground init failed:', e);
+        }
     }
 
     createTorusGeometry() {
@@ -84,7 +95,6 @@ class TorusBackground {
                 const a = i * (this.tubes + 1) + j;
                 const b = a + this.tubes + 1;
                 const c = a + 1;
-                const d = b + 1;
 
                 // Horizontal lines (around torus)
                 indices.push(a, b);
@@ -111,17 +121,20 @@ class TorusBackground {
                 dirU: (Math.random() > 0.5 ? 1 : -1) * (0.01 + Math.random() * 0.03),
                 dirV: (Math.random() > 0.5 ? 1 : -1) * (0.005 + Math.random() * 0.015),
                 // Trail length
-                trailLength: 3 + Math.floor(Math.random() * 8),
+                trailLength: 3 + Math.floor(Math.random() * 6),
                 // Color hue (cyan to blue to purple range)
                 hue: 0.5 + Math.random() * 0.3,
                 // Alpha
-                alpha: 0.6 + Math.random() * 0.4,
+                alpha: 0.7 + Math.random() * 0.3,
                 // Size
-                size: 1.5 + Math.random() * 2.5,
+                size: 2.0 + Math.random() * 3.0,
                 // Speed variation
                 speedVar: 0.5 + Math.random() * 1.0,
                 // Phase offset for pulsing
-                phase: Math.random() * Math.PI * 2
+                phase: Math.random() * Math.PI * 2,
+                // 3D position (will be computed)
+                x: 0, y: 0, z: 0,
+                currentAlpha: 1
             });
         }
     }
@@ -157,8 +170,8 @@ class TorusBackground {
             void main() {
                 // Apply morphing to vertices
                 vec3 pos = a_position;
-                float u = atan(pos.y, pos.x);
-                float morphOffset = sin(u_time * 0.5 + u * 2.0) * 0.08 * u_morph;
+                float angle = atan(pos.y, pos.x);
+                float morphOffset = sin(u_time * 0.5 + angle * 2.0) * 0.06 * u_morph;
                 pos *= 1.0 + morphOffset;
 
                 vec4 viewPos = u_modelView * vec4(pos, 1.0);
@@ -178,9 +191,9 @@ class TorusBackground {
             varying float v_glow;
 
             void main() {
-                float depthFade = smoothstep(4.0, 1.5, v_depth);
-                float alpha = u_alpha * depthFade * (0.15 + v_glow * 0.1);
-                vec3 color = u_color + vec3(v_glow * 0.1, v_glow * 0.15, v_glow * 0.2);
+                float depthFade = smoothstep(5.0, 2.0, v_depth);
+                float alpha = u_alpha * depthFade * (0.4 + v_glow * 0.3);
+                vec3 color = u_color + vec3(v_glow * 0.15, v_glow * 0.2, v_glow * 0.25);
                 gl_FragColor = vec4(color, alpha);
             }
         `;
@@ -194,7 +207,6 @@ class TorusBackground {
 
             uniform mat4 u_modelView;
             uniform mat4 u_projection;
-            uniform float u_time;
 
             varying float v_alpha;
             varying float v_hue;
@@ -203,7 +215,9 @@ class TorusBackground {
             void main() {
                 vec4 viewPos = u_modelView * vec4(a_position, 1.0);
                 gl_Position = u_projection * viewPos;
-                gl_PointSize = a_size * (3.0 / -viewPos.z) * 40.0;
+
+                float perspective = 3.0 / max(-viewPos.z, 0.1);
+                gl_PointSize = a_size * perspective * 35.0;
 
                 v_alpha = a_alpha;
                 v_hue = a_hue;
@@ -227,15 +241,17 @@ class TorusBackground {
                 vec2 center = gl_PointCoord - vec2(0.5);
                 float dist = length(center);
 
+                if (dist > 0.5) discard;
+
                 // Soft glowing point
                 float alpha = smoothstep(0.5, 0.0, dist) * v_alpha;
                 float glow = smoothstep(0.5, 0.1, dist);
 
                 // Depth fade
-                float depthFade = smoothstep(4.0, 1.5, v_depth);
+                float depthFade = smoothstep(5.0, 2.0, v_depth);
 
-                vec3 color = hsv2rgb(vec3(v_hue, 0.7, 1.0));
-                color = mix(color, vec3(1.0), glow * 0.4);
+                vec3 color = hsv2rgb(vec3(v_hue, 0.8, 1.0));
+                color = mix(color, vec3(1.0), glow * 0.5);
 
                 gl_FragColor = vec4(color, alpha * depthFade);
             }
@@ -243,6 +259,10 @@ class TorusBackground {
 
         // Compile torus program
         this.torusProgram = this.createProgram(torusVertexSource, torusFragmentSource);
+        if (!this.torusProgram) {
+            return false;
+        }
+
         this.torusLocations = {
             position: gl.getAttribLocation(this.torusProgram, 'a_position'),
             modelView: gl.getUniformLocation(this.torusProgram, 'u_modelView'),
@@ -255,14 +275,17 @@ class TorusBackground {
 
         // Compile particle program
         this.particleProgram = this.createProgram(particleVertexSource, particleFragmentSource);
+        if (!this.particleProgram) {
+            return false;
+        }
+
         this.particleLocations = {
             position: gl.getAttribLocation(this.particleProgram, 'a_position'),
             alpha: gl.getAttribLocation(this.particleProgram, 'a_alpha'),
             size: gl.getAttribLocation(this.particleProgram, 'a_size'),
             hue: gl.getAttribLocation(this.particleProgram, 'a_hue'),
             modelView: gl.getUniformLocation(this.particleProgram, 'u_modelView'),
-            projection: gl.getUniformLocation(this.particleProgram, 'u_projection'),
-            time: gl.getUniformLocation(this.particleProgram, 'u_time')
+            projection: gl.getUniformLocation(this.particleProgram, 'u_projection')
         };
 
         // Create buffers
@@ -278,13 +301,18 @@ class TorusBackground {
         this.particleAlphaBuffer = gl.createBuffer();
         this.particleSizeBuffer = gl.createBuffer();
         this.particleHueBuffer = gl.createBuffer();
+
+        return true;
     }
 
     createProgram(vertexSource, fragmentSource) {
         const gl = this.gl;
 
         const vertexShader = this.compileShader(gl.VERTEX_SHADER, vertexSource);
+        if (!vertexShader) return null;
+
         const fragmentShader = this.compileShader(gl.FRAGMENT_SHADER, fragmentSource);
+        if (!fragmentShader) return null;
 
         const program = gl.createProgram();
         gl.attachShader(program, vertexShader);
@@ -340,17 +368,20 @@ class TorusBackground {
     }
 
     resize() {
-        const dpr = Math.min(window.devicePixelRatio, 2);
-        this.canvas.width = window.innerWidth * dpr;
-        this.canvas.height = window.innerHeight * dpr;
-        this.canvas.style.width = window.innerWidth + 'px';
-        this.canvas.style.height = window.innerHeight + 'px';
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        this.canvas.width = width * dpr;
+        this.canvas.height = height * dpr;
+        this.canvas.style.width = width + 'px';
+        this.canvas.style.height = height + 'px';
 
         if (this.gl) {
             this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
         }
 
-        this.aspect = this.canvas.width / this.canvas.height;
+        this.aspect = width / height;
     }
 
     updateVelocity() {
@@ -401,8 +432,8 @@ class TorusBackground {
             p.z = pos.z;
 
             // Pulse alpha
-            p.currentAlpha = p.alpha * (0.6 + Math.sin(this.time * 0.05 + p.phase) * 0.4);
-            p.currentAlpha *= (0.7 + speed * 0.3);
+            p.currentAlpha = p.alpha * (0.7 + Math.sin(this.time * 0.05 + p.phase) * 0.3);
+            p.currentAlpha *= (0.8 + speed * 0.2);
         }
     }
 
@@ -484,8 +515,8 @@ class TorusBackground {
         const mouseInfluenceX = (this.mouse.y - 0.5) * 0.5;
         const mouseInfluenceY = (this.mouse.x - 0.5) * 0.5;
 
-        // Create transformation matrices
-        const translate = this.mat4Translate(0, 0, -3.0);
+        // Create transformation matrices - position torus closer for better visibility
+        const translate = this.mat4Translate(0, 0, -3.5);
         const rotX = this.mat4RotateX(this.rotationX + mouseInfluenceX);
         const rotY = this.mat4RotateY(this.rotationY + mouseInfluenceY);
         const rotZ = this.mat4RotateZ(this.rotationZ);
@@ -500,6 +531,7 @@ class TorusBackground {
 
     render() {
         const gl = this.gl;
+        if (!gl || !this.initialized) return;
 
         gl.clearColor(0, 0, 0, 0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -508,7 +540,7 @@ class TorusBackground {
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
         gl.disable(gl.DEPTH_TEST);
 
-        const projection = this.mat4Perspective(Math.PI / 4, this.aspect, 0.1, 100);
+        const projection = this.mat4Perspective(Math.PI / 4, this.aspect || 1, 0.1, 100);
         const modelView = this.getModelViewMatrix();
         const morphTime = this.time * 0.01;
 
@@ -519,8 +551,8 @@ class TorusBackground {
         gl.uniformMatrix4fv(this.torusLocations.modelView, false, modelView);
         gl.uniform1f(this.torusLocations.time, this.time * 0.01);
         gl.uniform1f(this.torusLocations.morph, this.speedMultiplier);
-        gl.uniform1f(this.torusLocations.alpha, 0.4 + this.speedMultiplier * 0.1);
-        gl.uniform3f(this.torusLocations.color, 0.2, 0.4, 0.8);
+        gl.uniform1f(this.torusLocations.alpha, 0.6 + this.speedMultiplier * 0.15);
+        gl.uniform3f(this.torusLocations.color, 0.2, 0.5, 0.9);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.torusVertexBuffer);
         gl.enableVertexAttribArray(this.torusLocations.position);
@@ -534,7 +566,6 @@ class TorusBackground {
 
         gl.uniformMatrix4fv(this.particleLocations.projection, false, projection);
         gl.uniformMatrix4fv(this.particleLocations.modelView, false, modelView);
-        gl.uniform1f(this.particleLocations.time, this.time * 0.01);
 
         // Prepare particle data with trails
         const positions = [];
@@ -556,7 +587,7 @@ class TorusBackground {
                 const trailPos = this.getTorusPoint(trailU, trailV, morphTime);
 
                 positions.push(trailPos.x, trailPos.y, trailPos.z);
-                alphas.push(p.currentAlpha * (1 - t / p.trailLength) * 0.6);
+                alphas.push(p.currentAlpha * (1 - t / p.trailLength) * 0.7);
                 sizes.push(p.size * (1 - t / p.trailLength * 0.5));
                 hues.push(p.hue + t * 0.02);
             }
@@ -587,6 +618,8 @@ class TorusBackground {
     }
 
     animate() {
+        if (!this.initialized) return;
+
         this.time++;
 
         // Smooth mouse interpolation
