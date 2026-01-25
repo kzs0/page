@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bedrock — Infrastructure Foundations</title>
+    <title>Bedrock — Go Observability Library</title>
     <link rel="stylesheet" href="../styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,6 +113,7 @@
             font-size: 0.8125rem;
             color: var(--text-primary);
             line-height: 1.7;
+            white-space: pre;
         }
 
         .code-block .comment {
@@ -183,16 +184,13 @@
             line-height: 1.6;
         }
 
-        .version-badge {
-            display: inline-block;
+        .inline-code {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--accent);
-            background: var(--accent-muted);
-            padding: 0.25rem 0.625rem;
+            font-size: 0.8125rem;
+            background: var(--bg-secondary);
+            padding: 0.15rem 0.4rem;
             border-radius: 4px;
-            margin-left: 0.75rem;
-            vertical-align: middle;
+            border: 1px solid var(--border);
         }
 
         @media (max-width: 768px) {
@@ -226,71 +224,55 @@
     <main class="main">
         <header class="docs-header">
             <p class="docs-label">Open Source</p>
-            <h1 class="docs-title">Bedrock<span class="version-badge">v2.4.0</span></h1>
+            <h1 class="docs-title">Bedrock</h1>
             <p class="docs-subtitle">
-                Infrastructure foundations for modern systems. A collection of battle-tested primitives
-                for building reliable, scalable distributed systems.
+                An opinionated observability framework for Go. Unified tracing, metrics, profiling,
+                and structured logging &mdash; no globals, everything flows through <span class="inline-code">context.Context</span>.
             </p>
             <div class="docs-links">
                 <a href="https://github.com/kzs0/bedrock" target="_blank" rel="noopener" class="docs-link">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     View on GitHub
                 </a>
-                <a href="https://github.com/kzs0/bedrock/releases" target="_blank" rel="noopener" class="docs-link">
-                    Changelog
+                <a href="https://pkg.go.dev/github.com/kzs0/bedrock" target="_blank" rel="noopener" class="docs-link">
+                    pkg.go.dev
                 </a>
             </div>
         </header>
 
         <section class="docs-section">
             <h2 class="docs-section-title">Installation</h2>
-            <p class="docs-text">
-                Bedrock is available via most package managers. Choose your preferred method below.
-            </p>
             <div class="code-block">
-                <code>
-<span class="comment"># Using pip</span>
-pip install bedrock-infra
-
-<span class="comment"># Using poetry</span>
-poetry add bedrock-infra
-
-<span class="comment"># Using cargo (Rust bindings)</span>
-cargo add bedrock-rs
-                </code>
+                <code>go get github.com/kzs0/bedrock</code>
             </div>
         </section>
 
         <section class="docs-section">
             <h2 class="docs-section-title">Features</h2>
-            <p class="docs-text">
-                Bedrock provides the foundational building blocks you need to build robust distributed systems
-                without reinventing the wheel.
-            </p>
             <div class="feature-grid">
                 <div class="feature-item">
-                    <h3 class="feature-title">Distributed Consensus</h3>
-                    <p class="feature-desc">Production-ready Raft implementation with leader election, log replication, and membership changes.</p>
+                    <h3 class="feature-title">Automatic Metrics</h3>
+                    <p class="feature-desc">Every operation automatically records count, success, failure, and duration measurements.</p>
                 </div>
                 <div class="feature-item">
-                    <h3 class="feature-title">Service Discovery</h3>
-                    <p class="feature-desc">Automatic service registration and health-aware routing with pluggable backends.</p>
+                    <h3 class="feature-title">Controlled Cardinality</h3>
+                    <p class="feature-desc">Define metric labels upfront to prevent explosion of label combinations in production.</p>
                 </div>
                 <div class="feature-item">
-                    <h3 class="feature-title">Circuit Breakers</h3>
-                    <p class="feature-desc">Configurable failure detection with exponential backoff and automatic recovery.</p>
+                    <h3 class="feature-title">W3C Trace Context</h3>
+                    <p class="feature-desc">Standards-compliant distributed tracing with automatic header propagation across services.</p>
                 </div>
                 <div class="feature-item">
-                    <h3 class="feature-title">Rate Limiting</h3>
-                    <p class="feature-desc">Token bucket and sliding window implementations with distributed coordination.</p>
+                    <h3 class="feature-title">HTTP Instrumentation</h3>
+                    <p class="feature-desc">Built-in middleware for request handling and instrumented clients for outbound calls.</p>
                 </div>
                 <div class="feature-item">
-                    <h3 class="feature-title">Metrics & Tracing</h3>
-                    <p class="feature-desc">First-class observability with OpenTelemetry integration and custom exporters.</p>
+                    <h3 class="feature-title">Observability Server</h3>
+                    <p class="feature-desc">Endpoints for Prometheus metrics, pprof profiling, and health checks out of the box.</p>
                 </div>
                 <div class="feature-item">
-                    <h3 class="feature-title">Graceful Shutdown</h3>
-                    <p class="feature-desc">Coordinated shutdown sequences with configurable drain periods and health checks.</p>
+                    <h3 class="feature-title">Production Defaults</h3>
+                    <p class="feature-desc">Security timeouts and DoS protections like Slowloris mitigation via ReadHeaderTimeout.</p>
                 </div>
             </div>
         </section>
@@ -298,90 +280,108 @@ cargo add bedrock-rs
         <section class="docs-section">
             <h2 class="docs-section-title">Quick Start</h2>
             <p class="docs-text">
-                Get up and running with Bedrock in minutes. Here's a simple example of setting up
-                a resilient service with circuit breaking and automatic retries.
+                Initialize Bedrock at application startup. The returned context carries all observability
+                state and should be propagated throughout your application.
             </p>
             <div class="code-block">
-                <code>
-<span class="keyword">from</span> bedrock <span class="keyword">import</span> Service, CircuitBreaker, RetryPolicy
+                <code><span class="keyword">package</span> main
 
-<span class="comment"># Configure the circuit breaker</span>
-breaker = CircuitBreaker(
-    failure_threshold=<span class="string">5</span>,
-    recovery_timeout=<span class="string">30</span>,
-    half_open_requests=<span class="string">3</span>
+<span class="keyword">import</span> (
+    <span class="string">"context"</span>
+    <span class="string">"net/http"</span>
+
+    <span class="string">"github.com/kzs0/bedrock"</span>
 )
 
-<span class="comment"># Set up retry policy with exponential backoff</span>
-retry = RetryPolicy(
-    max_attempts=<span class="string">3</span>,
-    base_delay=<span class="string">1.0</span>,
-    max_delay=<span class="string">30.0</span>,
-    exponential_base=<span class="string">2</span>
-)
+<span class="keyword">func</span> <span class="function">main</span>() {
+    <span class="comment">// Initialize bedrock with default configuration</span>
+    ctx, close := bedrock.<span class="function">Init</span>(context.<span class="function">Background</span>())
+    <span class="keyword">defer</span> <span class="function">close</span>()
 
-<span class="comment"># Create your service</span>
-<span class="keyword">class</span> <span class="function">MyService</span>(Service):
-    @breaker.protect
-    @retry.wrap
-    <span class="keyword">async def</span> <span class="function">call_external_api</span>(self, request):
-        <span class="keyword">return await</span> self.http.post(<span class="string">"/api/endpoint"</span>, request)
-                </code>
+    <span class="comment">// Create an instrumented HTTP handler</span>
+    mux := http.<span class="function">NewServeMux</span>()
+    mux.<span class="function">HandleFunc</span>(<span class="string">"/api/users"</span>, handleUsers)
+
+    <span class="comment">// Wrap with bedrock middleware</span>
+    handler := bedrock.<span class="function">HTTPMiddleware</span>(ctx, mux)
+
+    http.<span class="function">ListenAndServe</span>(<span class="string">":8080"</span>, handler)
+}</code>
             </div>
         </section>
 
         <section class="docs-section">
-            <h2 class="docs-section-title">Core API</h2>
+            <h2 class="docs-section-title">Core Concepts</h2>
             <p class="docs-text">
-                Reference documentation for the most commonly used components.
+                Bedrock organizes work into a hierarchy of observable units. This structure provides
+                flexibility in how you instrument your code while maintaining consistent telemetry.
             </p>
             <div class="api-item">
-                <p class="api-name">bedrock.Service</p>
-                <p class="api-desc">Base class for building services with lifecycle management, health checks, and graceful shutdown.</p>
+                <p class="api-name">Operation</p>
+                <p class="api-desc">Major units of work that generate full metrics: count, success, failure, and duration. Operations default to success; failures are explicitly registered via error attributes.</p>
             </div>
             <div class="api-item">
-                <p class="api-name">bedrock.CircuitBreaker</p>
-                <p class="api-desc">Prevents cascading failures by tracking error rates and temporarily blocking requests to failing dependencies.</p>
+                <p class="api-name">Source</p>
+                <p class="api-desc">Long-running processes that can spawn child operations and track aggregates. Use sources for background workers, queue consumers, or persistent connections.</p>
             </div>
             <div class="api-item">
-                <p class="api-name">bedrock.RetryPolicy</p>
-                <p class="api-desc">Configurable retry logic with support for exponential backoff, jitter, and custom retry conditions.</p>
-            </div>
-            <div class="api-item">
-                <p class="api-name">bedrock.RateLimiter</p>
-                <p class="api-desc">Token bucket rate limiter with support for distributed coordination via Redis or etcd.</p>
-            </div>
-            <div class="api-item">
-                <p class="api-name">bedrock.consensus.RaftNode</p>
-                <p class="api-desc">Full Raft consensus implementation for building strongly consistent distributed systems.</p>
-            </div>
-            <div class="api-item">
-                <p class="api-name">bedrock.discovery.ServiceRegistry</p>
-                <p class="api-desc">Service registration and discovery with health-aware load balancing and watch support.</p>
+                <p class="api-name">Step</p>
+                <p class="api-desc">Lightweight tracing spans within operations without separate metrics. Use steps to add granularity to traces without increasing metric cardinality.</p>
             </div>
         </section>
 
         <section class="docs-section">
-            <h2 class="docs-section-title">Philosophy</h2>
+            <h2 class="docs-section-title">Operations</h2>
             <p class="docs-text">
-                Bedrock is built on the principle that infrastructure code should be boring. We prioritize
-                correctness, observability, and operational simplicity over clever abstractions.
+                Operations are the primary unit of work in Bedrock. Each operation automatically
+                records metrics and creates a trace span.
             </p>
+            <div class="code-block">
+                <code><span class="keyword">func</span> <span class="function">handleUsers</span>(w http.ResponseWriter, r *http.Request) {
+    ctx := r.<span class="function">Context</span>()
+
+    <span class="comment">// Start an operation - automatically tracks duration and success/failure</span>
+    op := bedrock.<span class="function">Operation</span>(ctx, <span class="string">"fetch_users"</span>)
+    <span class="keyword">defer</span> op.<span class="function">Done</span>()
+
+    users, err := db.<span class="function">GetUsers</span>(ctx)
+    <span class="keyword">if</span> err != <span class="keyword">nil</span> {
+        <span class="comment">// Register the error - marks operation as failed</span>
+        op.<span class="function">Register</span>(<span class="string">"error"</span>, err.<span class="function">Error</span>())
+        http.<span class="function">Error</span>(w, <span class="string">"internal error"</span>, <span class="number">500</span>)
+        <span class="keyword">return</span>
+    }
+
+    <span class="comment">// Add attributes for debugging</span>
+    op.<span class="function">Register</span>(<span class="string">"user_count"</span>, <span class="function">len</span>(users))
+
+    json.<span class="function">NewEncoder</span>(w).<span class="function">Encode</span>(users)
+}</code>
+            </div>
+        </section>
+
+        <section class="docs-section">
+            <h2 class="docs-section-title">Configuration</h2>
             <p class="docs-text">
-                Every component is designed to fail gracefully, emit useful metrics, and integrate with
-                standard tooling. No magic, no surprises &mdash; just reliable foundations you can build on.
+                Configure Bedrock via options or environment variables.
             </p>
-            <p class="docs-text">
-                Born from years of operating distributed systems at scale, Bedrock encapsulates hard-won
-                lessons about what actually matters when the pager goes off at 3am.
-            </p>
+            <div class="code-block">
+                <code><span class="comment">// Via code</span>
+ctx, close := bedrock.<span class="function">Init</span>(ctx,
+    bedrock.<span class="function">WithService</span>(<span class="string">"my-service"</span>),
+    bedrock.<span class="function">WithLogLevel</span>(<span class="string">"debug"</span>),
+)
+
+<span class="comment">// Or via environment variables</span>
+<span class="comment">// BEDROCK_SERVICE=my-service</span>
+<span class="comment">// BEDROCK_LOG_LEVEL=debug</span></code>
+            </div>
         </section>
 
         <section class="docs-section">
             <h2 class="docs-section-title">License</h2>
             <p class="docs-text">
-                Bedrock is open source software licensed under the MIT License. Use it, fork it,
-                contribute to it &mdash; we welcome all participation.
+                Bedrock is open source software licensed under the MIT License.
             </p>
         </section>
     </main>
