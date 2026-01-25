@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog — kzs0</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        .blog-header {
+            padding: 10rem 0 4rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .blog-title {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+        }
+
+        .blog-subtitle {
+            font-size: 1.0625rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+        }
+
+        .posts {
+            padding: 3rem 0;
+        }
+
+        .posts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .post-item {
+            display: flex;
+            flex-direction: column;
+            padding: 1.75rem 0;
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .post-item:first-child {
+            border-top: 1px solid var(--border);
+        }
+
+        .post-item:hover {
+            padding-left: 1rem;
+            background: linear-gradient(90deg, var(--bg-secondary) 0%, transparent 100%);
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.625rem;
+        }
+
+        .post-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            letter-spacing: 0.02em;
+        }
+
+        .post-tag {
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.25rem 0.5rem;
+            background: var(--accent-muted);
+            border-radius: 3px;
+        }
+
+        .post-title {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .post-excerpt {
+            font-size: 0.9375rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 6rem 2rem;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .empty-state-text {
+            font-size: 1rem;
+            color: var(--text-tertiary);
+        }
+
+        @media (max-width: 768px) {
+            .blog-header {
+                padding: 8rem 0 3rem;
+            }
+
+            .post-item:hover {
+                padding-left: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="webgl-canvas"></canvas>
+
+    <nav class="nav">
+        <div class="nav-left">
+            <a href="/" class="nav-logo">kzs0</a>
+        </div>
+        <div class="nav-right">
+            <a href="/blog" class="nav-link" style="color: var(--text-primary);">Blog</a>
+            <a href="https://kzs0.dev/bedrock" class="nav-link">Bedrock</a>
+        </div>
+    </nav>
+
+    <main class="main">
+        <header class="blog-header">
+            <h1 class="blog-title">Blog</h1>
+            <p class="blog-subtitle">Thoughts on systems, architecture, and engineering at scale.</p>
+        </header>
+
+        <section class="posts">
+            <div class="posts-list">
+                <a href="/blog/designing-for-failure" class="post-item">
+                    <div class="post-meta">
+                        <span class="post-date">2025-01-15</span>
+                        <span class="post-tag">Architecture</span>
+                    </div>
+                    <h2 class="post-title">Designing for Failure at Scale</h2>
+                    <p class="post-excerpt">How we build systems that gracefully handle the unexpected when managing critical infrastructure.</p>
+                </a>
+
+                <a href="/blog/control-systems-primer" class="post-item">
+                    <div class="post-meta">
+                        <span class="post-date">2024-12-08</span>
+                        <span class="post-tag">Systems</span>
+                    </div>
+                    <h2 class="post-title">A Primer on Industrial Control Systems</h2>
+                    <p class="post-excerpt">Understanding the fundamentals of control theory and why it matters for modern software.</p>
+                </a>
+
+                <a href="/blog/distributed-consensus" class="post-item">
+                    <div class="post-meta">
+                        <span class="post-date">2024-11-22</span>
+                        <span class="post-tag">Distributed</span>
+                    </div>
+                    <h2 class="post-title">Consensus in Practice</h2>
+                    <p class="post-excerpt">Lessons learned implementing distributed consensus for real-time control systems.</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <span class="footer-text">© 2025 kzs0</span>
+    </footer>
+
+    <script src="../webgl.js"></script>
+    <script src="../main.js"></script>
+</body>
+</html>
