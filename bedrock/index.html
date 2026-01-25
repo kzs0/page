@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bedrock — Infrastructure Foundations</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        .docs-header {
+            padding: 10rem 0 4rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .docs-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            font-weight: 400;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .docs-title {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+        }
+
+        .docs-subtitle {
+            font-size: 1.0625rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .docs-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .docs-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            text-decoration: none;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .docs-link:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+            background: var(--bg-tertiary);
+        }
+
+        .docs-link svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .docs-section {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .docs-section:last-child {
+            border-bottom: none;
+        }
+
+        .docs-section-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .docs-text {
+            font-size: 0.9375rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 680px;
+        }
+
+        .docs-text + .docs-text {
+            margin-top: 1rem;
+        }
+
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        .code-block .comment {
+            color: var(--text-tertiary);
+        }
+
+        .code-block .keyword {
+            color: #c678dd;
+        }
+
+        .code-block .string {
+            color: #98c379;
+        }
+
+        .code-block .function {
+            color: #61afef;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-item {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .feature-title {
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .feature-desc {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .api-item {
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .api-item:first-child {
+            border-top: 1px solid var(--border);
+        }
+
+        .api-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .api-desc {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .version-badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: var(--accent-muted);
+            padding: 0.25rem 0.625rem;
+            border-radius: 4px;
+            margin-left: 0.75rem;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 768px) {
+            .docs-header {
+                padding: 8rem 0 3rem;
+            }
+
+            .docs-links {
+                flex-direction: column;
+            }
+
+            .docs-section {
+                padding: 3rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="webgl-canvas"></canvas>
+
+    <nav class="nav">
+        <div class="nav-left">
+            <a href="/" class="nav-logo">kzs0</a>
+        </div>
+        <div class="nav-right">
+            <a href="/blog" class="nav-link">Blog</a>
+            <a href="/bedrock" class="nav-link" style="color: var(--text-primary);">Bedrock</a>
+        </div>
+    </nav>
+
+    <main class="main">
+        <header class="docs-header">
+            <p class="docs-label">Open Source</p>
+            <h1 class="docs-title">Bedrock<span class="version-badge">v2.4.0</span></h1>
+            <p class="docs-subtitle">
+                Infrastructure foundations for modern systems. A collection of battle-tested primitives
+                for building reliable, scalable distributed systems.
+            </p>
+            <div class="docs-links">
+                <a href="https://github.com/kzs0/bedrock" target="_blank" rel="noopener" class="docs-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    View on GitHub
+                </a>
+                <a href="https://github.com/kzs0/bedrock/releases" target="_blank" rel="noopener" class="docs-link">
+                    Changelog
+                </a>
+            </div>
+        </header>
+
+        <section class="docs-section">
+            <h2 class="docs-section-title">Installation</h2>
+            <p class="docs-text">
+                Bedrock is available via most package managers. Choose your preferred method below.
+            </p>
+            <div class="code-block">
+                <code>
+<span class="comment"># Using pip</span>
+pip install bedrock-infra
+
+<span class="comment"># Using poetry</span>
+poetry add bedrock-infra
+
+<span class="comment"># Using cargo (Rust bindings)</span>
+cargo add bedrock-rs
+                </code>
+            </div>
+        </section>
+
+        <section class="docs-section">
+            <h2 class="docs-section-title">Features</h2>
+            <p class="docs-text">
+                Bedrock provides the foundational building blocks you need to build robust distributed systems
+                without reinventing the wheel.
+            </p>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3 class="feature-title">Distributed Consensus</h3>
+                    <p class="feature-desc">Production-ready Raft implementation with leader election, log replication, and membership changes.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Service Discovery</h3>
+                    <p class="feature-desc">Automatic service registration and health-aware routing with pluggable backends.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Circuit Breakers</h3>
+                    <p class="feature-desc">Configurable failure detection with exponential backoff and automatic recovery.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Rate Limiting</h3>
+                    <p class="feature-desc">Token bucket and sliding window implementations with distributed coordination.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Metrics & Tracing</h3>
+                    <p class="feature-desc">First-class observability with OpenTelemetry integration and custom exporters.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Graceful Shutdown</h3>
+                    <p class="feature-desc">Coordinated shutdown sequences with configurable drain periods and health checks.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="docs-section">
+            <h2 class="docs-section-title">Quick Start</h2>
+            <p class="docs-text">
+                Get up and running with Bedrock in minutes. Here's a simple example of setting up
+                a resilient service with circuit breaking and automatic retries.
+            </p>
+            <div class="code-block">
+                <code>
+<span class="keyword">from</span> bedrock <span class="keyword">import</span> Service, CircuitBreaker, RetryPolicy
+
+<span class="comment"># Configure the circuit breaker</span>
+breaker = CircuitBreaker(
+    failure_threshold=<span class="string">5</span>,
+    recovery_timeout=<span class="string">30</span>,
+    half_open_requests=<span class="string">3</span>
+)
+
+<span class="comment"># Set up retry policy with exponential backoff</span>
+retry = RetryPolicy(
+    max_attempts=<span class="string">3</span>,
+    base_delay=<span class="string">1.0</span>,
+    max_delay=<span class="string">30.0</span>,
+    exponential_base=<span class="string">2</span>
+)
+
+<span class="comment"># Create your service</span>
+<span class="keyword">class</span> <span class="function">MyService</span>(Service):
+    @breaker.protect
+    @retry.wrap
+    <span class="keyword">async def</span> <span class="function">call_external_api</span>(self, request):
+        <span class="keyword">return await</span> self.http.post(<span class="string">"/api/endpoint"</span>, request)
+                </code>
+            </div>
+        </section>
+
+        <section class="docs-section">
+            <h2 class="docs-section-title">Core API</h2>
+            <p class="docs-text">
+                Reference documentation for the most commonly used components.
+            </p>
+            <div class="api-item">
+                <p class="api-name">bedrock.Service</p>
+                <p class="api-desc">Base class for building services with lifecycle management, health checks, and graceful shutdown.</p>
+            </div>
+            <div class="api-item">
+                <p class="api-name">bedrock.CircuitBreaker</p>
+                <p class="api-desc">Prevents cascading failures by tracking error rates and temporarily blocking requests to failing dependencies.</p>
+            </div>
+            <div class="api-item">
+                <p class="api-name">bedrock.RetryPolicy</p>
+                <p class="api-desc">Configurable retry logic with support for exponential backoff, jitter, and custom retry conditions.</p>
+            </div>
+            <div class="api-item">
+                <p class="api-name">bedrock.RateLimiter</p>
+                <p class="api-desc">Token bucket rate limiter with support for distributed coordination via Redis or etcd.</p>
+            </div>
+            <div class="api-item">
+                <p class="api-name">bedrock.consensus.RaftNode</p>
+                <p class="api-desc">Full Raft consensus implementation for building strongly consistent distributed systems.</p>
+            </div>
+            <div class="api-item">
+                <p class="api-name">bedrock.discovery.ServiceRegistry</p>
+                <p class="api-desc">Service registration and discovery with health-aware load balancing and watch support.</p>
+            </div>
+        </section>
+
+        <section class="docs-section">
+            <h2 class="docs-section-title">Philosophy</h2>
+            <p class="docs-text">
+                Bedrock is built on the principle that infrastructure code should be boring. We prioritize
+                correctness, observability, and operational simplicity over clever abstractions.
+            </p>
+            <p class="docs-text">
+                Every component is designed to fail gracefully, emit useful metrics, and integrate with
+                standard tooling. No magic, no surprises &mdash; just reliable foundations you can build on.
+            </p>
+            <p class="docs-text">
+                Born from years of operating distributed systems at scale, Bedrock encapsulates hard-won
+                lessons about what actually matters when the pager goes off at 3am.
+            </p>
+        </section>
+
+        <section class="docs-section">
+            <h2 class="docs-section-title">License</h2>
+            <p class="docs-text">
+                Bedrock is open source software licensed under the MIT License. Use it, fork it,
+                contribute to it &mdash; we welcome all participation.
+            </p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <span class="footer-text">&copy; 2025 kzs0</span>
+    </footer>
+
+    <script src="../webgl.js"></script>
+    <script src="../main.js"></script>
+</body>
+</html>
