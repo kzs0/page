@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bedrock — Go Observability Library</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        .docs-header {
+            padding: 10rem 0 4rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .docs-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            font-weight: 400;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .docs-title {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+        }
+
+        .docs-subtitle {
+            font-size: 1.0625rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            max-width: 640px;
+            line-height: 1.7;
+        }
+
+        .docs-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .docs-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            text-decoration: none;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .docs-link:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+            background: var(--bg-tertiary);
+        }
+
+        .docs-link svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .version-badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: var(--accent-muted);
+            padding: 0.25rem 0.625rem;
+            border-radius: 4px;
+            margin-left: 0.75rem;
+            vertical-align: middle;
+        }
+
+        /* Table of Contents */
+        .toc {
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-title {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.25rem;
+        }
+
+        .toc-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem 2rem;
+            list-style: none;
+        }
+
+        .toc-link {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: block;
+            padding: 0.25rem 0;
+        }
+
+        .toc-link:hover {
+            color: var(--accent);
+        }
+
+        /* Docs Sections */
+        .docs-section {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .docs-section:last-child {
+            border-bottom: none;
+        }
+
+        .docs-section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .docs-section-subtitle {
+            font-size: 1.125rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            margin: 2.5rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        .docs-text {
+            font-size: 0.9375rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            max-width: 720px;
+        }
+
+        .docs-text + .docs-text {
+            margin-top: 1rem;
+        }
+
+        .docs-text strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .docs-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .docs-list li {
+            font-size: 0.9375rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .docs-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--text-tertiary);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            color: var(--text-primary);
+            line-height: 1.7;
+            white-space: pre;
+            display: block;
+        }
+
+        .code-block .comment {
+            color: var(--text-tertiary);
+        }
+
+        .code-block .keyword {
+            color: #c678dd;
+        }
+
+        .code-block .string {
+            color: #98c379;
+        }
+
+        .code-block .function {
+            color: #61afef;
+        }
+
+        .code-block .type {
+            color: #e5c07b;
+        }
+
+        .code-block .number {
+            color: #d19a66;
+        }
+
+        .code-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6875rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .inline-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            background: var(--bg-secondary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-item {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .feature-title {
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .feature-desc {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* API Reference */
+        .api-group {
+            margin: 2rem 0;
+        }
+
+        .api-group-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .api-item {
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .api-item:last-child {
+            border-bottom: none;
+        }
+
+        .api-signature {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            color: var(--text-primary);
+            margin-bottom: 0.625rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .api-desc {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Config Table */
+        .config-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.875rem;
+        }
+
+        .config-table th {
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .config-table td {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+
+        .config-table td:first-child {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .config-table code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            background: var(--bg-tertiary);
+            padding: 0.125rem 0.375rem;
+            border-radius: 3px;
+        }
+
+        /* Callout */
+        .callout {
+            background: var(--accent-muted);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .callout-title {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .callout-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Metrics Table */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .metric-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem 1.25rem;
+        }
+
+        .metric-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            color: var(--text-primary);
+            margin-bottom: 0.375rem;
+        }
+
+        .metric-desc {
+            font-size: 0.8125rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Godoc Embed */
+        .godoc-frame {
+            width: 100%;
+            height: 600px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            background: #fff;
+        }
+
+        .godoc-link {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .docs-header {
+                padding: 8rem 0 3rem;
+            }
+
+            .docs-links {
+                flex-direction: column;
+            }
+
+            .docs-section {
+                padding: 3rem 0;
+            }
+
+            .config-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .toc-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="webgl-canvas"></canvas>
+
+    <nav class="nav">
+        <div class="nav-left">
+            <a href="/" class="nav-logo">kzs0</a>
+        </div>
+        <div class="nav-right">
+            <a href="/blog" class="nav-link">Blog</a>
+            <a href="/bedrock" class="nav-link" style="color: var(--text-primary);">Bedrock</a>
+        </div>
+    </nav>
+
+    <main class="main">
+        <header class="docs-header">
+            <p class="docs-label">Open Source</p>
+            <h1 class="docs-title">Bedrock<span class="version-badge">v0.2.2</span></h1>
+            <p class="docs-subtitle">
+                An opinionated observability framework for Go that unifies tracing, metrics, profiling,
+                and structured logging. No globals &mdash; everything flows through <span class="inline-code">context.Context</span>.
+            </p>
+            <div class="docs-links">
+                <a href="https://github.com/kzs0/bedrock" target="_blank" rel="noopener" class="docs-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+                <a href="https://pkg.go.dev/github.com/kzs0/bedrock" target="_blank" rel="noopener" class="docs-link">
+                    pkg.go.dev
+                </a>
+                <a href="https://github.com/kzs0/bedrock/releases" target="_blank" rel="noopener" class="docs-link">
+                    Releases
+                </a>
+            </div>
+        </header>
+
+        <!-- Table of Contents -->
+        <nav class="toc">
+            <h2 class="toc-title">Contents</h2>
+            <ul class="toc-list">
+                <li><a href="#overview" class="toc-link">Overview</a></li>
+                <li><a href="#installation" class="toc-link">Installation</a></li>
+                <li><a href="#quickstart" class="toc-link">Quick Start</a></li>
+                <li><a href="#operations" class="toc-link">Operations</a></li>
+                <li><a href="#sources" class="toc-link">Sources</a></li>
+                <li><a href="#steps" class="toc-link">Steps</a></li>
+                <li><a href="#http" class="toc-link">HTTP Instrumentation</a></li>
+                <li><a href="#tracing" class="toc-link">Distributed Tracing</a></li>
+                <li><a href="#logging" class="toc-link">Logging</a></li>
+                <li><a href="#metrics" class="toc-link">Metrics</a></li>
+                <li><a href="#configuration" class="toc-link">Configuration</a></li>
+                <li><a href="#server" class="toc-link">Observability Server</a></li>
+                <li><a href="#security" class="toc-link">Security Defaults</a></li>
+                <li><a href="#api-reference" class="toc-link">API Reference</a></li>
+            </ul>
+        </nav>
+
+        <!-- Overview -->
+        <section id="overview" class="docs-section">
+            <h2 class="docs-section-title">Overview</h2>
+            <p class="docs-text">
+                Bedrock is built on the principle that observability should be automatic, consistent, and non-intrusive.
+                Rather than requiring developers to manually instrument every function with metrics, traces, and logs,
+                Bedrock provides high-level primitives that handle this automatically.
+            </p>
+            <p class="docs-text">
+                The core design philosophy is <strong>context-based flow</strong>: all observability state is carried through
+                <span class="inline-code">context.Context</span>, eliminating global state and making it trivial to test,
+                compose, and reason about instrumented code.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3 class="feature-title">Automatic Metrics</h3>
+                    <p class="feature-desc">Every operation automatically records count, success, failure, and duration. No manual instrumentation required.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Controlled Cardinality</h3>
+                    <p class="feature-desc">Define metric labels upfront with <span class="inline-code">MetricLabels()</span> to prevent label explosion in production.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">W3C Trace Context</h3>
+                    <p class="feature-desc">Standards-compliant distributed tracing with automatic header propagation across service boundaries.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">HTTP Instrumentation</h3>
+                    <p class="feature-desc">Built-in middleware for handlers and instrumented clients that automatically propagate trace context.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Observability Server</h3>
+                    <p class="feature-desc">Prometheus metrics, pprof profiling, and health check endpoints ready out of the box.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Production Defaults</h3>
+                    <p class="feature-desc">Security-hardened timeouts and DoS protections like Slowloris mitigation built in.</p>
+                </div>
+            </div>
+
+            <div class="callout">
+                <p class="callout-title">Design Principle</p>
+                <p class="callout-text">
+                    Operations are <strong>success by default</strong>. They only count as failures when you explicitly
+                    register an error via <span class="inline-code">attr.Error(err)</span>. This eliminates false positives
+                    and ensures your metrics accurately reflect actual failures.
+                </p>
+            </div>
+        </section>
+
+        <!-- Installation -->
+        <section id="installation" class="docs-section">
+            <h2 class="docs-section-title">Installation</h2>
+            <p class="docs-text">
+                Install Bedrock using Go modules. Requires Go 1.21 or later.
+            </p>
+            <div class="code-block">
+                <code>go get github.com/kzs0/bedrock</code>
+            </div>
+        </section>
+
+        <!-- Quick Start -->
+        <section id="quickstart" class="docs-section">
+            <h2 class="docs-section-title">Quick Start</h2>
+            <p class="docs-text">
+                Initialize Bedrock at application startup. The <span class="inline-code">Init</span> function returns
+                a context carrying all observability state and a cleanup function that should be deferred.
+            </p>
+
+            <div class="code-block">
+                <code><span class="keyword">package</span> main
+
+<span class="keyword">import</span> (
+    <span class="string">"context"</span>
+    <span class="string">"net/http"</span>
+
+    <span class="string">"github.com/kzs0/bedrock"</span>
+    <span class="string">"github.com/kzs0/bedrock/attr"</span>
+)
+
+<span class="keyword">func</span> <span class="function">main</span>() {
+    <span class="comment">// Initialize bedrock - returns enriched context and cleanup function</span>
+    ctx, close := bedrock.<span class="function">Init</span>(context.<span class="function">Background</span>(),
+        bedrock.<span class="function">WithStaticAttrs</span>(attr.<span class="function">String</span>(<span class="string">"env"</span>, <span class="string">"production"</span>)),
+    )
+    <span class="keyword">defer</span> <span class="function">close</span>()
+
+    <span class="comment">// Create HTTP handler</span>
+    mux := http.<span class="function">NewServeMux</span>()
+    mux.<span class="function">HandleFunc</span>(<span class="string">"/users"</span>, handleUsers)
+
+    <span class="comment">// Wrap with bedrock middleware for automatic instrumentation</span>
+    handler := bedrock.<span class="function">HTTPMiddleware</span>(ctx, mux)
+
+    http.<span class="function">ListenAndServe</span>(<span class="string">":8080"</span>, handler)
+}
+
+<span class="keyword">func</span> <span class="function">handleUsers</span>(w http.<span class="type">ResponseWriter</span>, r *http.<span class="type">Request</span>) {
+    ctx := r.<span class="function">Context</span>()
+
+    <span class="comment">// Start an operation - metrics are recorded automatically</span>
+    op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="string">"fetch_users"</span>,
+        bedrock.<span class="function">MetricLabels</span>(<span class="string">"status"</span>),
+    )
+    <span class="keyword">defer</span> op.<span class="function">Done</span>()
+
+    users, err := <span class="function">getUsers</span>(ctx)
+    <span class="keyword">if</span> err != <span class="keyword">nil</span> {
+        <span class="comment">// Register error - marks operation as failed</span>
+        op.<span class="function">Register</span>(ctx, attr.<span class="function">Error</span>(err))
+        op.<span class="function">Register</span>(ctx, attr.<span class="function">String</span>(<span class="string">"status"</span>, <span class="string">"error"</span>))
+        http.<span class="function">Error</span>(w, <span class="string">"internal error"</span>, <span class="number">500</span>)
+        <span class="keyword">return</span>
+    }
+
+    op.<span class="function">Register</span>(ctx, attr.<span class="function">String</span>(<span class="string">"status"</span>, <span class="string">"success"</span>))
+    op.<span class="function">Register</span>(ctx, attr.<span class="function">Int</span>(<span class="string">"user_count"</span>, <span class="function">len</span>(users)))
+    <span class="comment">// ... send response</span>
+}</code>
+            </div>
+        </section>
+
+        <!-- Operations -->
+        <section id="operations" class="docs-section">
+            <h2 class="docs-section-title">Operations</h2>
+            <p class="docs-text">
+                Operations are the primary unit of work in Bedrock. Each operation represents a discrete task
+                that you want to observe &mdash; an API request handler, a database query, a message processor, etc.
+            </p>
+            <p class="docs-text">
+                When you create an operation, Bedrock automatically:
+            </p>
+            <ul class="docs-list">
+                <li>Creates a trace span for distributed tracing</li>
+                <li>Starts a timer for duration measurement</li>
+                <li>Prepares to record success/failure metrics</li>
+                <li>Sets up structured logging context</li>
+            </ul>
+
+            <h3 class="docs-section-subtitle">Automatic Metrics</h3>
+            <p class="docs-text">
+                Every operation generates four metrics automatically, using the operation name as the base:
+            </p>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <p class="metric-name">{name}_count</p>
+                    <p class="metric-desc">Total number of operations started</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">{name}_successes</p>
+                    <p class="metric-desc">Operations completed without error</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">{name}_failures</p>
+                    <p class="metric-desc">Operations that registered an error</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">{name}_duration_ms</p>
+                    <p class="metric-desc">Histogram of operation durations</p>
+                </div>
+            </div>
+
+            <h3 class="docs-section-subtitle">Creating Operations</h3>
+            <div class="code-block">
+                <code><span class="comment">// Basic operation</span>
+op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="string">"process_order"</span>)
+<span class="keyword">defer</span> op.<span class="function">Done</span>()
+
+<span class="comment">// With initial attributes (added to trace span)</span>
+op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="string">"process_order"</span>,
+    bedrock.<span class="function">Attrs</span>(
+        attr.<span class="function">String</span>(<span class="string">"order_id"</span>, orderID),
+        attr.<span class="function">String</span>(<span class="string">"customer_id"</span>, customerID),
+    ),
+)
+
+<span class="comment">// With metric labels (controls cardinality)</span>
+op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="string">"process_order"</span>,
+    bedrock.<span class="function">MetricLabels</span>(<span class="string">"order_type"</span>, <span class="string">"region"</span>),
+)
+
+<span class="comment">// Register attributes during execution</span>
+op.<span class="function">Register</span>(ctx, attr.<span class="function">String</span>(<span class="string">"order_type"</span>, <span class="string">"subscription"</span>))
+op.<span class="function">Register</span>(ctx, attr.<span class="function">String</span>(<span class="string">"region"</span>, <span class="string">"us-east"</span>))
+op.<span class="function">Register</span>(ctx, attr.<span class="function">Int</span>(<span class="string">"item_count"</span>, <span class="number">5</span>))</code>
+            </div>
+
+            <h3 class="docs-section-subtitle">Recording Failures</h3>
+            <p class="docs-text">
+                Operations succeed by default. To record a failure, register an error attribute:
+            </p>
+            <div class="code-block">
+                <code>result, err := <span class="function">processOrder</span>(ctx, order)
+<span class="keyword">if</span> err != <span class="keyword">nil</span> {
+    <span class="comment">// This marks the operation as failed</span>
+    op.<span class="function">Register</span>(ctx, attr.<span class="function">Error</span>(err))
+    <span class="keyword">return</span> err
+}
+
+<span class="comment">// Operation completes as success (no error registered)</span></code>
+            </div>
+
+            <h3 class="docs-section-subtitle">Nested Operations</h3>
+            <p class="docs-text">
+                Operations can be nested. Child operations automatically inherit the parent's trace context
+                and create child spans:
+            </p>
+            <div class="code-block">
+                <code><span class="keyword">func</span> <span class="function">handleRequest</span>(ctx context.<span class="type">Context</span>) {
+    op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="string">"handle_request"</span>)
+    <span class="keyword">defer</span> op.<span class="function">Done</span>()
+
+    <span class="comment">// Child operation - creates nested span</span>
+    <span class="function">validateInput</span>(ctx)
+    <span class="function">processData</span>(ctx)
+}
+
+<span class="keyword">func</span> <span class="function">validateInput</span>(ctx context.<span class="type">Context</span>) {
+    op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="string">"validate_input"</span>)
+    <span class="keyword">defer</span> op.<span class="function">Done</span>()
+    <span class="comment">// Automatically a child of handle_request</span>
+}</code>
+            </div>
+        </section>
+
+        <!-- Sources -->
+        <section id="sources" class="docs-section">
+            <h2 class="docs-section-title">Sources</h2>
+            <p class="docs-text">
+                Sources represent long-running processes that spawn multiple operations over time &mdash; background workers,
+                queue consumers, WebSocket handlers, or any persistent goroutine that processes work continuously.
+            </p>
+            <p class="docs-text">
+                Unlike operations which track individual units of work, sources track aggregate metrics across
+                their entire lifetime and automatically prefix child operations with their name.
+            </p>
+
+            <div class="code-block">
+                <code><span class="keyword">func</span> <span class="function">runWorker</span>(ctx context.<span class="type">Context</span>) {
+    <span class="comment">// Create a source for this long-running worker</span>
+    source, ctx := bedrock.<span class="function">Source</span>(ctx, <span class="string">"order_processor"</span>,
+        bedrock.<span class="function">SourceAttrs</span>(attr.<span class="function">String</span>(<span class="string">"worker_id"</span>, workerID)),
+        bedrock.<span class="function">SourceMetricLabels</span>(<span class="string">"queue"</span>),
+    )
+    <span class="keyword">defer</span> source.<span class="function">Done</span>()
+
+    <span class="keyword">for</span> {
+        <span class="keyword">select</span> {
+        <span class="keyword">case</span> &lt;-ctx.<span class="function">Done</span>():
+            <span class="keyword">return</span>
+        <span class="keyword">case</span> order := &lt;-orderCh:
+            <span class="comment">// Child operation: "order_processor.process"</span>
+            <span class="function">processOrder</span>(ctx, order)
+
+            <span class="comment">// Track aggregate metrics on the source</span>
+            source.<span class="function">Aggregate</span>(ctx,
+                attr.<span class="function">Sum</span>(<span class="string">"orders_processed"</span>, <span class="number">1</span>),
+                attr.<span class="function">Gauge</span>(<span class="string">"queue_depth"</span>, <span class="function">len</span>(orderCh)),
+            )
+        }
+    }
+}
+
+<span class="keyword">func</span> <span class="function">processOrder</span>(ctx context.<span class="type">Context</span>, order Order) {
+    <span class="comment">// Creates "order_processor.process" operation</span>
+    op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="string">"process"</span>)
+    <span class="keyword">defer</span> op.<span class="function">Done</span>()
+    <span class="comment">// ...</span>
+}</code>
+            </div>
+
+            <h3 class="docs-section-subtitle">Aggregate Metrics</h3>
+            <p class="docs-text">
+                Sources support three types of aggregate metrics:
+            </p>
+            <ul class="docs-list">
+                <li><span class="inline-code">attr.Sum(name, value)</span> &mdash; Cumulative counter (e.g., total items processed)</li>
+                <li><span class="inline-code">attr.Gauge(name, value)</span> &mdash; Point-in-time value (e.g., queue depth)</li>
+                <li><span class="inline-code">attr.Histogram(name, value)</span> &mdash; Distribution (e.g., batch sizes)</li>
+            </ul>
+        </section>
+
+        <!-- Steps -->
+        <section id="steps" class="docs-section">
+            <h2 class="docs-section-title">Steps</h2>
+            <p class="docs-text">
+                Steps are lightweight tracing spans that add granularity to traces without generating separate metrics.
+                Use steps when you want to see timing breakdown within an operation but don't need individual success/failure
+                tracking or metric cardinality.
+            </p>
+
+            <div class="code-block">
+                <code><span class="keyword">func</span> <span class="function">handleRequest</span>(ctx context.<span class="type">Context</span>) {
+    op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="string">"handle_request"</span>)
+    <span class="keyword">defer</span> op.<span class="function">Done</span>()
+
+    <span class="comment">// Steps add trace detail without metric overhead</span>
+    {
+        step := bedrock.<span class="function">Step</span>(ctx, <span class="string">"parse_input"</span>)
+        input := <span class="function">parseInput</span>(request)
+        step.<span class="function">Register</span>(ctx, attr.<span class="function">Int</span>(<span class="string">"input_size"</span>, <span class="function">len</span>(input)))
+        step.<span class="function">Done</span>()
+    }
+
+    {
+        step := bedrock.<span class="function">Step</span>(ctx, <span class="string">"validate"</span>)
+        <span class="function">validate</span>(input)
+        step.<span class="function">Done</span>()
+    }
+
+    {
+        step := bedrock.<span class="function">Step</span>(ctx, <span class="string">"transform"</span>)
+        result := <span class="function">transform</span>(input)
+        step.<span class="function">Done</span>()
+    }
+}</code>
+            </div>
+
+            <p class="docs-text">
+                In the trace, you'll see the parent <span class="inline-code">handle_request</span> span with three child spans
+                (parse_input, validate, transform) showing exactly where time was spent.
+            </p>
+        </section>
+
+        <!-- HTTP Instrumentation -->
+        <section id="http" class="docs-section">
+            <h2 class="docs-section-title">HTTP Instrumentation</h2>
+
+            <h3 class="docs-section-subtitle">Server Middleware</h3>
+            <p class="docs-text">
+                Wrap your HTTP handlers to automatically create operations for each request with standardized attributes:
+            </p>
+
+            <div class="code-block">
+                <code>mux := http.<span class="function">NewServeMux</span>()
+mux.<span class="function">HandleFunc</span>(<span class="string">"/api/users"</span>, handleUsers)
+mux.<span class="function">HandleFunc</span>(<span class="string">"/api/orders"</span>, handleOrders)
+
+handler := bedrock.<span class="function">HTTPMiddleware</span>(ctx, mux,
+    <span class="comment">// Customize operation name (default: "http.request")</span>
+    bedrock.<span class="function">WithOperationName</span>(<span class="string">"api.request"</span>),
+
+    <span class="comment">// Add extra labels to metrics</span>
+    bedrock.<span class="function">WithAdditionalLabels</span>(<span class="string">"user_agent"</span>),
+
+    <span class="comment">// Custom attribute extraction</span>
+    bedrock.<span class="function">WithAdditionalAttrs</span>(<span class="keyword">func</span>(r *http.<span class="type">Request</span>) []attr.<span class="type">Attr</span> {
+        <span class="keyword">return</span> []attr.<span class="type">Attr</span>{
+            attr.<span class="function">String</span>(<span class="string">"user_id"</span>, r.Header.<span class="function">Get</span>(<span class="string">"X-User-ID"</span>)),
+        }
+    }),
+
+    <span class="comment">// Define which status codes count as success</span>
+    bedrock.<span class="function">WithSuccessCodes</span>(<span class="number">200</span>, <span class="number">201</span>, <span class="number">204</span>, <span class="number">304</span>),
+)
+
+http.<span class="function">ListenAndServe</span>(<span class="string">":8080"</span>, handler)</code>
+            </div>
+
+            <p class="docs-text">
+                <strong>Auto-captured attributes:</strong>
+            </p>
+            <ul class="docs-list">
+                <li><span class="inline-code">http.method</span> &mdash; GET, POST, etc.</li>
+                <li><span class="inline-code">http.route</span> &mdash; The matched route pattern</li>
+                <li><span class="inline-code">http.scheme</span> &mdash; http or https</li>
+                <li><span class="inline-code">http.host</span> &mdash; The request host</li>
+                <li><span class="inline-code">http.status_code</span> &mdash; Response status code</li>
+            </ul>
+
+            <h3 class="docs-section-subtitle">Client Instrumentation</h3>
+            <p class="docs-text">
+                Instrumented HTTP clients automatically inject trace context headers into outgoing requests:
+            </p>
+
+            <div class="code-block">
+                <code><span class="comment">// Wrap an existing client</span>
+client := bedrock.<span class="function">NewClient</span>(&http.<span class="type">Client</span>{
+    Timeout: <span class="number">30</span> * time.Second,
+})
+resp, err := client.<span class="function">Get</span>(ctx, <span class="string">"https://api.example.com/users"</span>)
+
+<span class="comment">// Or use convenience functions</span>
+resp, err := bedrock.<span class="function">Get</span>(ctx, <span class="string">"https://api.example.com/users"</span>)
+resp, err := bedrock.<span class="function">Post</span>(ctx, url, <span class="string">"application/json"</span>, body)
+resp, err := bedrock.<span class="function">Do</span>(ctx, req)</code>
+            </div>
+        </section>
+
+        <!-- Distributed Tracing -->
+        <section id="tracing" class="docs-section">
+            <h2 class="docs-section-title">Distributed Tracing</h2>
+            <p class="docs-text">
+                Bedrock implements the <strong>W3C Trace Context</strong> standard for distributed tracing, ensuring
+                compatibility with any tracing backend that supports the standard (Jaeger, Zipkin, OpenTelemetry, etc.).
+            </p>
+
+            <h3 class="docs-section-subtitle">Automatic Propagation</h3>
+            <p class="docs-text">
+                Trace context is automatically propagated via HTTP headers:
+            </p>
+            <ul class="docs-list">
+                <li><span class="inline-code">traceparent</span> &mdash; Contains trace ID, span ID, and flags</li>
+                <li><span class="inline-code">tracestate</span> &mdash; Vendor-specific trace data</li>
+            </ul>
+
+            <div class="code-block">
+                <code><span class="comment">// Header format: traceparent: 00-{trace-id}-{parent-id}-{flags}</span>
+<span class="comment">// Example:      traceparent: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01</span>
+
+<span class="comment">// Middleware extracts inbound context automatically</span>
+handler := bedrock.<span class="function">HTTPMiddleware</span>(ctx, mux)
+
+<span class="comment">// Client injects context into outbound requests automatically</span>
+resp, err := bedrock.<span class="function">Get</span>(ctx, <span class="string">"https://downstream-service/api"</span>)</code>
+            </div>
+
+            <h3 class="docs-section-subtitle">Manual Context Handling</h3>
+            <p class="docs-text">
+                For non-HTTP transports (message queues, gRPC, etc.), you can manually handle trace context:
+            </p>
+
+            <div class="code-block">
+                <code><span class="comment">// Extract trace context from incoming message</span>
+spanCtx, err := trace.<span class="function">ExtractContext</span>(message.Headers)
+
+<span class="comment">// Create operation with remote parent</span>
+op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="string">"process_message"</span>,
+    bedrock.<span class="function">WithRemoteParent</span>(spanCtx),
+)
+
+<span class="comment">// Inject context into outgoing message</span>
+b := bedrock.<span class="function">FromContext</span>(ctx)
+b.<span class="function">Tracer</span>().<span class="function">Inject</span>(ctx, outgoingMessage.Headers)</code>
+            </div>
+        </section>
+
+        <!-- Logging -->
+        <section id="logging" class="docs-section">
+            <h2 class="docs-section-title">Logging</h2>
+            <p class="docs-text">
+                Bedrock provides structured logging that automatically includes static attributes and trace context.
+                Logs are correlated with traces, making it easy to find relevant logs for a specific request.
+            </p>
+
+            <div class="code-block">
+                <code><span class="comment">// Log levels</span>
+bedrock.<span class="function">Debug</span>(ctx, <span class="string">"cache lookup"</span>, attr.<span class="function">String</span>(<span class="string">"key"</span>, cacheKey))
+bedrock.<span class="function">Info</span>(ctx, <span class="string">"user logged in"</span>, attr.<span class="function">String</span>(<span class="string">"user_id"</span>, userID))
+bedrock.<span class="function">Warn</span>(ctx, <span class="string">"rate limit approaching"</span>, attr.<span class="function">Int</span>(<span class="string">"current"</span>, <span class="number">95</span>))
+bedrock.<span class="function">Error</span>(ctx, <span class="string">"database connection failed"</span>, attr.<span class="function">Error</span>(err))
+
+<span class="comment">// Generic log with custom level</span>
+bedrock.<span class="function">Log</span>(ctx, slog.LevelInfo, <span class="string">"custom message"</span>, attr.<span class="function">String</span>(<span class="string">"key"</span>, <span class="string">"value"</span>))
+
+<span class="comment">// Access underlying slog.Logger for advanced use</span>
+logger := bedrock.<span class="function">FromContext</span>(ctx).<span class="function">Logger</span>()</code>
+            </div>
+
+            <h3 class="docs-section-subtitle">Canonical Logs</h3>
+            <p class="docs-text">
+                When <span class="inline-code">LogCanonical</span> is enabled, Bedrock emits a single comprehensive log line
+                at the end of each operation containing all registered attributes. This is useful for analytics pipelines
+                that process structured logs.
+            </p>
+        </section>
+
+        <!-- Metrics -->
+        <section id="metrics" class="docs-section">
+            <h2 class="docs-section-title">Metrics</h2>
+            <p class="docs-text">
+                Beyond automatic operation metrics, Bedrock provides type-safe APIs for creating custom metrics
+                that automatically include static labels defined at initialization.
+            </p>
+
+            <h3 class="docs-section-subtitle">Counter</h3>
+            <div class="code-block">
+                <code><span class="comment">// Create a counter with labels</span>
+requestCounter := bedrock.<span class="function">Counter</span>(ctx,
+    <span class="string">"http_requests_total"</span>,      <span class="comment">// name</span>
+    <span class="string">"Total HTTP requests"</span>,       <span class="comment">// help text</span>
+    <span class="string">"method"</span>, <span class="string">"status"</span>,           <span class="comment">// label names</span>
+)
+
+<span class="comment">// Increment with labels</span>
+requestCounter.<span class="function">With</span>(
+    attr.<span class="function">String</span>(<span class="string">"method"</span>, <span class="string">"GET"</span>),
+    attr.<span class="function">String</span>(<span class="string">"status"</span>, <span class="string">"200"</span>),
+).<span class="function">Inc</span>()
+
+<span class="comment">// Add arbitrary value</span>
+requestCounter.<span class="function">With</span>(...).<span class="function">Add</span>(<span class="number">5</span>)
+
+<span class="comment">// Without labels (uses static labels only)</span>
+simpleCounter := bedrock.<span class="function">Counter</span>(ctx, <span class="string">"events_total"</span>, <span class="string">"Total events"</span>)
+simpleCounter.<span class="function">Inc</span>()</code>
+            </div>
+
+            <h3 class="docs-section-subtitle">Gauge</h3>
+            <div class="code-block">
+                <code>queueGauge := bedrock.<span class="function">Gauge</span>(ctx,
+    <span class="string">"queue_depth"</span>,
+    <span class="string">"Current queue depth"</span>,
+    <span class="string">"queue_name"</span>,
+)
+
+queueGauge.<span class="function">With</span>(attr.<span class="function">String</span>(<span class="string">"queue_name"</span>, <span class="string">"orders"</span>)).<span class="function">Set</span>(<span class="number">42</span>)
+queueGauge.<span class="function">With</span>(...).<span class="function">Inc</span>()
+queueGauge.<span class="function">With</span>(...).<span class="function">Dec</span>()
+queueGauge.<span class="function">With</span>(...).<span class="function">Add</span>(<span class="number">10</span>)
+queueGauge.<span class="function">With</span>(...).<span class="function">Sub</span>(<span class="number">5</span>)</code>
+            </div>
+
+            <h3 class="docs-section-subtitle">Histogram</h3>
+            <div class="code-block">
+                <code><span class="comment">// With default buckets</span>
+latencyHist := bedrock.<span class="function">Histogram</span>(ctx,
+    <span class="string">"request_duration_ms"</span>,
+    <span class="string">"Request duration in milliseconds"</span>,
+    <span class="keyword">nil</span>,  <span class="comment">// use default buckets</span>
+    <span class="string">"endpoint"</span>,
+)
+
+<span class="comment">// With custom buckets</span>
+sizeHist := bedrock.<span class="function">Histogram</span>(ctx,
+    <span class="string">"response_size_bytes"</span>,
+    <span class="string">"Response size in bytes"</span>,
+    []<span class="type">float64</span>{<span class="number">100</span>, <span class="number">1000</span>, <span class="number">10000</span>, <span class="number">100000</span>},
+    <span class="string">"endpoint"</span>,
+)
+
+latencyHist.<span class="function">With</span>(attr.<span class="function">String</span>(<span class="string">"endpoint"</span>, <span class="string">"/users"</span>)).<span class="function">Observe</span>(<span class="number">123.45</span>)</code>
+            </div>
+        </section>
+
+        <!-- Configuration -->
+        <section id="configuration" class="docs-section">
+            <h2 class="docs-section-title">Configuration</h2>
+            <p class="docs-text">
+                Bedrock can be configured programmatically or via environment variables. Environment variables
+                take precedence when using <span class="inline-code">FromEnv()</span>.
+            </p>
+
+            <h3 class="docs-section-subtitle">Environment Variables</h3>
+            <div class="config-table-wrapper" style="overflow-x: auto;">
+                <table class="config-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BEDROCK_SERVICE</td>
+                            <td>Service name for identification</td>
+                            <td><code>unknown</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_LOG_LEVEL</td>
+                            <td>Minimum log level (DEBUG, INFO, WARN, ERROR)</td>
+                            <td><code>INFO</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_LOG_FORMAT</td>
+                            <td>Output format (json or text)</td>
+                            <td><code>json</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_LOG_CANONICAL</td>
+                            <td>Enable canonical log lines per operation</td>
+                            <td><code>false</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_LOG_ADD_SOURCE</td>
+                            <td>Include source file:line in logs</td>
+                            <td><code>false</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_TRACE_URL</td>
+                            <td>OTLP endpoint for trace export</td>
+                            <td><code>""</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_TRACE_SAMPLE_RATE</td>
+                            <td>Trace sampling rate (0.0 - 1.0)</td>
+                            <td><code>1.0</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_METRIC_PREFIX</td>
+                            <td>Prefix for all metric names</td>
+                            <td><code>""</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_SERVER_ENABLED</td>
+                            <td>Enable observability server</td>
+                            <td><code>true</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_SERVER_ADDR</td>
+                            <td>Observability server address</td>
+                            <td><code>:9090</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_SHUTDOWN_TIMEOUT</td>
+                            <td>Graceful shutdown timeout</td>
+                            <td><code>30s</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="docs-section-subtitle">Programmatic Configuration</h3>
+            <div class="code-block">
+                <code><span class="comment">// Using Config struct</span>
+cfg := bedrock.<span class="type">Config</span>{
+    Service:         <span class="string">"my-service"</span>,
+    LogLevel:        <span class="string">"info"</span>,
+    LogFormat:       <span class="string">"json"</span>,
+    LogCanonical:    <span class="keyword">true</span>,
+    TraceURL:        <span class="string">"http://localhost:4318/v1/traces"</span>,
+    TraceSampleRate: <span class="number">0.1</span>,  <span class="comment">// 10% sampling</span>
+    MetricPrefix:    <span class="string">"myapp"</span>,
+    ServerEnabled:   <span class="keyword">true</span>,
+    ServerAddr:      <span class="string">":9090"</span>,
+    ShutdownTimeout: <span class="number">30</span> * time.Second,
+}
+
+ctx, close := bedrock.<span class="function">Init</span>(ctx, bedrock.<span class="function">WithConfig</span>(cfg))
+
+<span class="comment">// Using init options</span>
+ctx, close := bedrock.<span class="function">Init</span>(ctx,
+    bedrock.<span class="function">WithLogLevel</span>(<span class="string">"debug"</span>),
+    bedrock.<span class="function">WithStaticAttrs</span>(
+        attr.<span class="function">String</span>(<span class="string">"env"</span>, <span class="string">"production"</span>),
+        attr.<span class="function">String</span>(<span class="string">"version"</span>, <span class="string">"1.2.3"</span>),
+    ),
+)
+
+<span class="comment">// Load from environment with defaults</span>
+cfg, err := bedrock.<span class="function">FromEnv</span>()
+<span class="comment">// or panic on error</span>
+cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
+            </div>
+        </section>
+
+        <!-- Observability Server -->
+        <section id="server" class="docs-section">
+            <h2 class="docs-section-title">Observability Server</h2>
+            <p class="docs-text">
+                Bedrock includes a built-in HTTP server that exposes metrics, profiling, and health check endpoints.
+                This server runs separately from your application server and is typically bound to a different port
+                for security.
+            </p>
+
+            <h3 class="docs-section-subtitle">Endpoints</h3>
+            <div class="config-table-wrapper" style="overflow-x: auto;">
+                <table class="config-table">
+                    <thead>
+                        <tr>
+                            <th>Path</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>/metrics</td>
+                            <td>Prometheus-format metrics</td>
+                        </tr>
+                        <tr>
+                            <td>/health</td>
+                            <td>Liveness check (returns 200 if running)</td>
+                        </tr>
+                        <tr>
+                            <td>/ready</td>
+                            <td>Readiness check for load balancers</td>
+                        </tr>
+                        <tr>
+                            <td>/debug/pprof/</td>
+                            <td>pprof index</td>
+                        </tr>
+                        <tr>
+                            <td>/debug/pprof/profile</td>
+                            <td>CPU profile</td>
+                        </tr>
+                        <tr>
+                            <td>/debug/pprof/heap</td>
+                            <td>Heap memory profile</td>
+                        </tr>
+                        <tr>
+                            <td>/debug/pprof/goroutine</td>
+                            <td>Goroutine stack traces</td>
+                        </tr>
+                        <tr>
+                            <td>/debug/pprof/trace</td>
+                            <td>Execution trace</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="code-block">
+                <code><span class="comment">// Server starts automatically with Init() if enabled</span>
+<span class="comment">// Access metrics: curl http://localhost:9090/metrics</span>
+<span class="comment">// Health check:   curl http://localhost:9090/health</span>
+<span class="comment">// CPU profile:    go tool pprof http://localhost:9090/debug/pprof/profile</span></code>
+            </div>
+        </section>
+
+        <!-- Security Defaults -->
+        <section id="security" class="docs-section">
+            <h2 class="docs-section-title">Security Defaults</h2>
+            <p class="docs-text">
+                Bedrock's observability server includes production-hardened defaults to protect against common
+                denial-of-service attacks. These can be customized via configuration if needed.
+            </p>
+
+            <div class="config-table-wrapper" style="overflow-x: auto;">
+                <table class="config-table">
+                    <thead>
+                        <tr>
+                            <th>Setting</th>
+                            <th>Default</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ReadHeaderTimeout</td>
+                            <td><code>5s</code></td>
+                            <td>Slowloris attack protection</td>
+                        </tr>
+                        <tr>
+                            <td>ReadTimeout</td>
+                            <td><code>10s</code></td>
+                            <td>Slow-read attack protection</td>
+                        </tr>
+                        <tr>
+                            <td>WriteTimeout</td>
+                            <td><code>30s</code></td>
+                            <td>Slow-write attack protection</td>
+                        </tr>
+                        <tr>
+                            <td>IdleTimeout</td>
+                            <td><code>120s</code></td>
+                            <td>Connection cleanup for keep-alives</td>
+                        </tr>
+                        <tr>
+                            <td>MaxHeaderBytes</td>
+                            <td><code>1MB</code></td>
+                            <td>Header bomb prevention</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- API Reference -->
+        <section id="api-reference" class="docs-section">
+            <h2 class="docs-section-title">API Reference</h2>
+            <p class="docs-text">
+                Complete API documentation is available on pkg.go.dev. The embedded documentation below
+                provides the full reference generated from Go docstrings.
+            </p>
+
+            <iframe
+                class="godoc-frame"
+                src="https://pkg.go.dev/github.com/kzs0/bedrock?utm_source=embed"
+                title="Bedrock Go Documentation"
+                loading="lazy"
+            ></iframe>
+
+            <p class="godoc-link">
+                <a href="https://pkg.go.dev/github.com/kzs0/bedrock" target="_blank" rel="noopener" class="link">
+                    View full documentation on pkg.go.dev &rarr;
+                </a>
+            </p>
+
+            <div class="api-group">
+                <h3 class="api-group-title">Core Functions</h3>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Init</span>(ctx context.Context, opts ...InitOption) (context.Context, func())</p>
+                    <p class="api-desc">Initialize Bedrock and return an enriched context with a cleanup function. The cleanup function should be deferred to ensure proper shutdown.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Operation</span>(ctx context.Context, name string, opts ...OperationOption) (*Op, context.Context)</p>
+                    <p class="api-desc">Start a new operation. If a parent operation exists in the context, creates a child operation with automatic trace linking.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Source</span>(ctx context.Context, name string, opts ...SourceOption) (*Src, context.Context)</p>
+                    <p class="api-desc">Register a long-running source. Child operations are automatically prefixed with the source name.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Step</span>(ctx context.Context, name string, attrs ...attr.Attr) *OpStep</p>
+                    <p class="api-desc">Create a lightweight tracing step within the current operation without generating separate metrics.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">FromContext</span>(ctx context.Context) *Bedrock</p>
+                    <p class="api-desc">Extract the Bedrock instance from context for direct access to Logger, Metrics, and Tracer.</p>
+                </div>
+            </div>
+
+            <div class="api-group">
+                <h3 class="api-group-title">HTTP Functions</h3>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">HTTPMiddleware</span>(ctx context.Context, handler http.Handler, opts ...MiddlewareOption) http.Handler</p>
+                    <p class="api-desc">Wrap an HTTP handler with automatic operation creation, trace propagation, and standardized attributes.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">NewClient</span>(base *http.Client) *http.Client</p>
+                    <p class="api-desc">Create an instrumented HTTP client that automatically injects trace context into outgoing requests.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Get</span>(ctx context.Context, url string) (*http.Response, error)</p>
+                    <p class="api-desc">Convenience function for instrumented GET requests.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Post</span>(ctx context.Context, url, contentType string, body io.Reader) (*http.Response, error)</p>
+                    <p class="api-desc">Convenience function for instrumented POST requests.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Do</span>(ctx context.Context, req *http.Request) (*http.Response, error)</p>
+                    <p class="api-desc">Execute an instrumented HTTP request.</p>
+                </div>
+            </div>
+
+            <div class="api-group">
+                <h3 class="api-group-title">Logging Functions</h3>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Debug</span>(ctx context.Context, msg string, attrs ...attr.Attr)</p>
+                    <p class="api-desc">Log at DEBUG level with automatic static attributes and trace context.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Info</span>(ctx context.Context, msg string, attrs ...attr.Attr)</p>
+                    <p class="api-desc">Log at INFO level with automatic static attributes and trace context.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Warn</span>(ctx context.Context, msg string, attrs ...attr.Attr)</p>
+                    <p class="api-desc">Log at WARN level with automatic static attributes and trace context.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Error</span>(ctx context.Context, msg string, attrs ...attr.Attr)</p>
+                    <p class="api-desc">Log at ERROR level with automatic static attributes and trace context.</p>
+                </div>
+            </div>
+
+            <div class="api-group">
+                <h3 class="api-group-title">Metrics Functions</h3>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Counter</span>(ctx context.Context, name, help string, labelNames ...string) *CounterWithStatic</p>
+                    <p class="api-desc">Create or retrieve a counter metric with automatic static labels.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Gauge</span>(ctx context.Context, name, help string, labelNames ...string) *GaugeWithStatic</p>
+                    <p class="api-desc">Create or retrieve a gauge metric with automatic static labels.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Histogram</span>(ctx context.Context, name, help string, buckets []float64, labelNames ...string) *HistogramWithStatic</p>
+                    <p class="api-desc">Create or retrieve a histogram metric with automatic static labels. Pass nil for default buckets.</p>
+                </div>
+            </div>
+
+            <div class="api-group">
+                <h3 class="api-group-title">Init Options</h3>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">WithConfig</span>(cfg Config) InitOption</p>
+                    <p class="api-desc">Initialize with a complete configuration struct.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">WithStaticAttrs</span>(attrs ...attr.Attr) InitOption</p>
+                    <p class="api-desc">Set static attributes that are automatically added to all metrics, logs, and traces.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">WithLogLevel</span>(level string) InitOption</p>
+                    <p class="api-desc">Override the log level (DEBUG, INFO, WARN, ERROR).</p>
+                </div>
+            </div>
+
+            <div class="api-group">
+                <h3 class="api-group-title">Operation Options</h3>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">Attrs</span>(attrs ...attr.Attr) OperationOption</p>
+                    <p class="api-desc">Set initial attributes on the operation's trace span.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">MetricLabels</span>(labelNames ...string) OperationOption</p>
+                    <p class="api-desc">Define which attributes should be used as metric labels. Controls cardinality.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">WithRemoteParent</span>(parent trace.SpanContext) OperationOption</p>
+                    <p class="api-desc">Link operation to a remote parent span for cross-service tracing.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <span class="footer-text">&copy; 2025 kzs0</span>
+    </footer>
+
+    <script src="../webgl.js"></script>
+    <script src="../main.js"></script>
+    <script>
+        // Smooth scroll for table of contents
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    history.pushState(null, null, link.getAttribute('href'));
+                }
+            });
+        });
+    </script>
+</body>
+</html>
