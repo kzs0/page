@@ -32,18 +32,6 @@ body {
     overflow-x: hidden;
 }
 
-/* WebGL Canvas */
-#webgl-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.85;
-}
-
 /* Navigation */
 .nav {
     position: fixed;
@@ -300,11 +288,11 @@ body {
     }
 }
 
-/* Subtle fade-in animation */
-@keyframes fadeIn {
+/* Elegant slide-up fade-in animation */
+@keyframes slideUpFadeIn {
     from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(24px);
     }
     to {
         opacity: 1;
@@ -312,17 +300,55 @@ body {
     }
 }
 
-.hero-content {
-    animation: fadeIn 0.8s ease-out;
+/* Hero elements with staggered entrance */
+.hero-label,
+.hero-title,
+.hero-description {
+    animation: slideUpFadeIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
+.hero-label {
+    animation-delay: 0.1s;
+}
+
+.hero-title {
+    animation-delay: 0.2s;
+}
+
+.hero-description {
+    animation-delay: 0.35s;
+}
+
+/* Section labels */
+.section-label {
+    animation: slideUpFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.work .section-label {
+    animation-delay: 0.1s;
+}
+
+.connect .section-label {
+    animation-delay: 0.1s;
+}
+
+/* Work items with staggered entrance */
 .work-item {
-    animation: fadeIn 0.6s ease-out backwards;
+    animation: slideUpFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-.work-item:nth-child(1) { animation-delay: 0.1s; }
-.work-item:nth-child(2) { animation-delay: 0.2s; }
-.work-item:nth-child(3) { animation-delay: 0.3s; }
+.work-item:nth-child(1) { animation-delay: 0.2s; }
+.work-item:nth-child(2) { animation-delay: 0.3s; }
+.work-item:nth-child(3) { animation-delay: 0.4s; }
+
+/* Connect links with staggered entrance */
+.connect-link {
+    animation: slideUpFadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.connect-link:nth-child(1) { animation-delay: 0.2s; }
+.connect-link:nth-child(2) { animation-delay: 0.28s; }
+.connect-link:nth-child(3) { animation-delay: 0.36s; }
 
 /* Selection */
 ::selection {
