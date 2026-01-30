@@ -206,20 +206,22 @@
     <script src="../main.js"></script>
     <script>
         // Initialize Vanta.js topology background
-        if (window.VANTA) {
-            window.vantaEffect = VANTA.TOPOLOGY({
-                el: "#vanta-bg",
-                mouseControls: true,
-                touchControls: true,
-                gyroControls: false,
-                minHeight: 200.00,
-                minWidth: 200.00,
-                scale: 1.00,
-                scaleMobile: 1.00,
-                color: 0x3b82f6,
-                backgroundColor: 0x0a0a0b
-            });
-        }
+        window.addEventListener('load', function() {
+            if (window.VANTA && window.VANTA.TOPOLOGY) {
+                window.vantaEffect = VANTA.TOPOLOGY({
+                    el: "#vanta-bg",
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 200.00,
+                    minWidth: 200.00,
+                    scale: 1.00,
+                    scaleMobile: 1.00,
+                    color: 0x3b82f6,
+                    backgroundColor: 0x0a0a0b
+                });
+            }
+        });
 
         // Replay animations when page is restored from bfcache (back/forward navigation)
         window.addEventListener('pageshow', function(event) {
