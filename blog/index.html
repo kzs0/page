@@ -148,8 +148,6 @@
     </style>
 </head>
 <body>
-    <canvas id="webgl-canvas"></canvas>
-
     <nav class="nav">
         <div class="nav-left">
             <a href="/" class="nav-logo">kzs0</a>
@@ -202,7 +200,18 @@
         <span class="footer-text">© 2025 kzs0</span>
     </footer>
 
-    <script src="../webgl.js"></script>
     <script src="../main.js"></script>
+    <script>
+        // Replay animations when page is restored from bfcache (back/forward navigation)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                document.querySelectorAll('.blog-title, .blog-subtitle, .post-item').forEach(function(el) {
+                    el.style.animation = 'none';
+                    el.offsetHeight; // Trigger reflow
+                    el.style.animation = '';
+                });
+            }
+        });
+    </script>
 </body>
 </html>

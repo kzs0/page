@@ -84,5 +84,17 @@
     </footer>
 
     <script src="main.js"></script>
+    <script>
+        // Replay animations when page is restored from bfcache (back/forward navigation)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                document.querySelectorAll('.hero-label, .hero-title, .hero-description, .section-label, .work-item, .connect-link').forEach(function(el) {
+                    el.style.animation = 'none';
+                    el.offsetHeight; // Trigger reflow
+                    el.style.animation = '';
+                });
+            }
+        });
+    </script>
 </body>
 </html>
