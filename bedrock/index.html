@@ -462,7 +462,7 @@
     <main class="main">
         <header class="docs-header">
             <p class="docs-label">Open Source</p>
-            <h1 class="docs-title">Bedrock<span class="version-badge">v0.2.2</span></h1>
+            <h1 class="docs-title">Bedrock<span class="version-badge">v0.3.2</span></h1>
             <p class="docs-subtitle">
                 An opinionated observability framework for Go that unifies tracing, metrics, profiling,
                 and structured logging. No globals &mdash; everything flows through <span class="inline-code">context.Context</span>.
@@ -540,6 +540,10 @@
                 <div class="feature-item">
                     <h3 class="feature-title">Production Defaults</h3>
                     <p class="feature-desc">Security-hardened timeouts and DoS protections like Slowloris mitigation built in.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Runtime Metrics</h3>
+                    <p class="feature-desc">Automatic Go runtime metrics collection including goroutine counts, memory stats, and GC metrics.</p>
                 </div>
             </div>
 
@@ -725,6 +729,24 @@ op.<span class="function">Register</span>(ctx, attr.<span class="function">Int</
     <span class="keyword">defer</span> op.<span class="function">Done</span>()
     <span class="comment">// Automatically a child of handle_request</span>
 }</code>
+            </div>
+
+            <h3 class="docs-section-subtitle">NoTrace Option</h3>
+            <p class="docs-text">
+                For high-frequency operations where tracing overhead is a concern, use the <span class="inline-code">NoTrace</span>
+                option to record metrics without creating trace spans. This is useful for operations that run thousands of
+                times per second where full tracing would be prohibitively expensive.
+            </p>
+            <div class="code-block">
+                <code><span class="comment">// Operation with metrics only - no trace span created</span>
+op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="string">"cache_lookup"</span>,
+    bedrock.<span class="function">NoTrace</span>(),
+    bedrock.<span class="function">MetricLabels</span>(<span class="string">"cache_name"</span>),
+)
+<span class="keyword">defer</span> op.<span class="function">Done</span>()
+
+<span class="comment">// Still records metrics: cache_lookup_count, cache_lookup_successes, etc.</span>
+<span class="comment">// But no trace span is created, reducing overhead</span></code>
             </div>
         </section>
 
@@ -1036,6 +1058,34 @@ sizeHist := bedrock.<span class="function">Histogram</span>(ctx,
 
 latencyHist.<span class="function">With</span>(attr.<span class="function">String</span>(<span class="string">"endpoint"</span>, <span class="string">"/users"</span>)).<span class="function">Observe</span>(<span class="number">123.45</span>)</code>
             </div>
+
+            <h3 class="docs-section-subtitle">Runtime Metrics</h3>
+            <p class="docs-text">
+                Bedrock automatically collects Go runtime metrics with static attributes. These metrics provide
+                visibility into your application's resource usage and garbage collection behavior.
+            </p>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <p class="metric-name">go_goroutines</p>
+                    <p class="metric-desc">Number of active goroutines</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">go_memstats_alloc_bytes</p>
+                    <p class="metric-desc">Bytes allocated and in use</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">go_memstats_heap_objects</p>
+                    <p class="metric-desc">Number of allocated heap objects</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">go_gc_duration_seconds</p>
+                    <p class="metric-desc">GC pause duration histogram</p>
+                </div>
+            </div>
+            <p class="docs-text">
+                Runtime metrics are automatically exposed on the <span class="inline-code">/metrics</span> endpoint
+                and include your static attributes as labels for consistent filtering across all metrics.
+            </p>
         </section>
 
         <!-- Configuration -->
@@ -1395,6 +1445,10 @@ cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
                 <div class="api-item">
                     <p class="api-signature"><span class="keyword">func</span> <span class="function">WithRemoteParent</span>(parent trace.SpanContext) OperationOption</p>
                     <p class="api-desc">Link operation to a remote parent span for cross-service tracing.</p>
+                </div>
+                <div class="api-item">
+                    <p class="api-signature"><span class="keyword">func</span> <span class="function">NoTrace</span>() OperationOption</p>
+                    <p class="api-desc">Disable trace span creation for this operation. Metrics are still recorded, but no tracing overhead is incurred.</p>
                 </div>
             </div>
         </section>
