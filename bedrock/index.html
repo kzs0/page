@@ -1512,7 +1512,10 @@ cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
     <script src="../main.js"></script>
     <script>
         // Initialize Vanta.js topology background
-        window.addEventListener('load', function() {
+        function initVanta() {
+            if (window.vantaEffect) {
+                window.vantaEffect.destroy();
+            }
             if (window.VANTA && window.VANTA.TOPOLOGY) {
                 window.vantaEffect = VANTA.TOPOLOGY({
                     el: "#vanta-bg",
@@ -1526,6 +1529,15 @@ cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
                     color: 0x3b82f6,
                     backgroundColor: 0x0a0a0b
                 });
+            }
+        }
+
+        window.addEventListener('load', initVanta);
+
+        // Cleanup Vanta effect when leaving the page
+        window.addEventListener('beforeunload', function() {
+            if (window.vantaEffect) {
+                window.vantaEffect.destroy();
             }
         });
 
@@ -1541,9 +1553,10 @@ cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
             });
         });
 
-        // Replay animations when page is restored from bfcache (back/forward navigation)
+        // Replay animations and reinitialize Vanta when page is restored from bfcache
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {
+                initVanta();
                 document.querySelectorAll('.docs-label, .docs-title, .docs-subtitle, .docs-link, .toc, .docs-section, .feature-item').forEach(function(el) {
                     el.style.animation = 'none';
                     el.offsetHeight; // Trigger reflow

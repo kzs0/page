@@ -206,7 +206,10 @@
     <script src="../main.js"></script>
     <script>
         // Initialize Vanta.js topology background
-        window.addEventListener('load', function() {
+        function initVanta() {
+            if (window.vantaEffect) {
+                window.vantaEffect.destroy();
+            }
             if (window.VANTA && window.VANTA.TOPOLOGY) {
                 window.vantaEffect = VANTA.TOPOLOGY({
                     el: "#vanta-bg",
@@ -221,11 +224,21 @@
                     backgroundColor: 0x0a0a0b
                 });
             }
+        }
+
+        window.addEventListener('load', initVanta);
+
+        // Cleanup Vanta effect when leaving the page
+        window.addEventListener('beforeunload', function() {
+            if (window.vantaEffect) {
+                window.vantaEffect.destroy();
+            }
         });
 
-        // Replay animations when page is restored from bfcache (back/forward navigation)
+        // Replay animations and reinitialize Vanta when page is restored from bfcache
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {
+                initVanta();
                 document.querySelectorAll('.blog-title, .blog-subtitle, .post-item').forEach(function(el) {
                     el.style.animation = 'none';
                     el.offsetHeight; // Trigger reflow
