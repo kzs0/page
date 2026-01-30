@@ -304,51 +304,51 @@ body {
 .hero-label,
 .hero-title,
 .hero-description {
-    animation: slideUpFadeIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation: slideUpFadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .hero-label {
-    animation-delay: 0.1s;
-}
-
-.hero-title {
     animation-delay: 0.2s;
 }
 
+.hero-title {
+    animation-delay: 0.4s;
+}
+
 .hero-description {
-    animation-delay: 0.35s;
+    animation-delay: 0.7s;
 }
 
 /* Section labels */
 .section-label {
-    animation: slideUpFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation: slideUpFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .work .section-label {
-    animation-delay: 0.1s;
+    animation-delay: 0.2s;
 }
 
 .connect .section-label {
-    animation-delay: 0.1s;
+    animation-delay: 0.2s;
 }
 
 /* Work items with staggered entrance */
 .work-item {
-    animation: slideUpFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation: slideUpFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-.work-item:nth-child(1) { animation-delay: 0.2s; }
-.work-item:nth-child(2) { animation-delay: 0.3s; }
-.work-item:nth-child(3) { animation-delay: 0.4s; }
+.work-item:nth-child(1) { animation-delay: 0.4s; }
+.work-item:nth-child(2) { animation-delay: 0.6s; }
+.work-item:nth-child(3) { animation-delay: 0.8s; }
 
 /* Connect links with staggered entrance */
 .connect-link {
-    animation: slideUpFadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation: slideUpFadeIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-.connect-link:nth-child(1) { animation-delay: 0.2s; }
-.connect-link:nth-child(2) { animation-delay: 0.28s; }
-.connect-link:nth-child(3) { animation-delay: 0.36s; }
+.connect-link:nth-child(1) { animation-delay: 0.4s; }
+.connect-link:nth-child(2) { animation-delay: 0.55s; }
+.connect-link:nth-child(3) { animation-delay: 0.7s; }
 
 /* Selection */
 ::selection {
