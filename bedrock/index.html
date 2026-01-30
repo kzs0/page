@@ -444,6 +444,55 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Slide-up fade-in animations */
+        .docs-label,
+        .docs-title,
+        .docs-subtitle {
+            animation: slideUpFadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+        }
+
+        .docs-label {
+            animation-delay: 0.2s;
+        }
+
+        .docs-title {
+            animation-delay: 0.4s;
+        }
+
+        .docs-subtitle {
+            animation-delay: 0.6s;
+        }
+
+        .docs-link {
+            animation: slideUpFadeIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+        }
+
+        .docs-link:nth-child(1) { animation-delay: 0.7s; }
+        .docs-link:nth-child(2) { animation-delay: 0.85s; }
+        .docs-link:nth-child(3) { animation-delay: 1s; }
+
+        .toc {
+            animation: slideUpFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+            animation-delay: 0.3s;
+        }
+
+        .docs-section {
+            animation: slideUpFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+            animation-delay: 0.2s;
+        }
+
+        .feature-item {
+            animation: slideUpFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+        }
+
+        .feature-item:nth-child(1) { animation-delay: 0.3s; }
+        .feature-item:nth-child(2) { animation-delay: 0.4s; }
+        .feature-item:nth-child(3) { animation-delay: 0.5s; }
+        .feature-item:nth-child(4) { animation-delay: 0.6s; }
+        .feature-item:nth-child(5) { animation-delay: 0.7s; }
+        .feature-item:nth-child(6) { animation-delay: 0.8s; }
+        .feature-item:nth-child(7) { animation-delay: 0.9s; }
     </style>
 </head>
 <body>
