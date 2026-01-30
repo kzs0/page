@@ -496,8 +496,6 @@
     </style>
 </head>
 <body>
-    <canvas id="webgl-canvas"></canvas>
-
     <nav class="nav">
         <div class="nav-left">
             <a href="/" class="nav-logo">kzs0</a>
@@ -1508,7 +1506,6 @@ cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
         <span class="footer-text">&copy; 2025 kzs0</span>
     </footer>
 
-    <script src="../webgl.js"></script>
     <script src="../main.js"></script>
     <script>
         // Smooth scroll for table of contents
@@ -1521,6 +1518,17 @@ cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
                     history.pushState(null, null, link.getAttribute('href'));
                 }
             });
+        });
+
+        // Replay animations when page is restored from bfcache (back/forward navigation)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                document.querySelectorAll('.docs-label, .docs-title, .docs-subtitle, .docs-link, .toc, .docs-section, .feature-item').forEach(function(el) {
+                    el.style.animation = 'none';
+                    el.offsetHeight; // Trigger reflow
+                    el.style.animation = '';
+                });
+            }
         });
     </script>
 </body>
