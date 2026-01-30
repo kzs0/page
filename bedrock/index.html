@@ -496,6 +496,7 @@
     </style>
 </head>
 <body>
+    <div id="vanta-bg"></div>
     <nav class="nav">
         <div class="nav-left">
             <a href="/" class="nav-logo">kzs0</a>
@@ -1506,8 +1507,26 @@ cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
         <span class="footer-text">&copy; 2025 kzs0</span>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js"></script>
     <script src="../main.js"></script>
     <script>
+        // Initialize Vanta.js topology background
+        if (window.VANTA) {
+            window.vantaEffect = VANTA.TOPOLOGY({
+                el: "#vanta-bg",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: 0x3b82f6,
+                backgroundColor: 0x0a0a0b
+            });
+        }
+
         // Smooth scroll for table of contents
         document.querySelectorAll('.toc-link').forEach(link => {
             link.addEventListener('click', (e) => {
