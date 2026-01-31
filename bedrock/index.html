@@ -406,14 +406,63 @@
             color: var(--text-tertiary);
         }
 
-        /* Godoc Embed */
-        .godoc-frame {
-            width: 100%;
-            height: 600px;
+        /* Godoc Link Card */
+        .godoc-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
             border: 1px solid var(--border);
             border-radius: 8px;
             margin: 1.5rem 0;
-            background: #fff;
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .godoc-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .godoc-card-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1.5rem;
+        }
+
+        .godoc-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .godoc-card-desc {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .godoc-card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            transition: background 0.2s ease;
+        }
+
+        .godoc-card:hover .godoc-card-action {
+            background: var(--accent-hover);
         }
 
         .godoc-link {
@@ -1363,22 +1412,26 @@ cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
         <section id="api-reference" class="docs-section">
             <h2 class="docs-section-title">API Reference</h2>
             <p class="docs-text">
-                Complete API documentation is available on pkg.go.dev. The embedded documentation below
-                provides the full reference generated from Go docstrings.
+                Complete API documentation is available on pkg.go.dev, including the full reference
+                generated from Go docstrings.
             </p>
 
-            <iframe
-                class="godoc-frame"
-                src="https://pkg.go.dev/github.com/kzs0/bedrock?utm_source=embed"
-                title="Bedrock Go Documentation"
-                loading="lazy"
-            ></iframe>
-
-            <p class="godoc-link">
-                <a href="https://pkg.go.dev/github.com/kzs0/bedrock" target="_blank" rel="noopener" class="link">
-                    View full documentation on pkg.go.dev &rarr;
-                </a>
-            </p>
+            <a href="https://pkg.go.dev/github.com/kzs0/bedrock" target="_blank" rel="noopener" class="godoc-card">
+                <svg class="godoc-card-icon" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="128" height="128" rx="16" fill="#00ADD8"/>
+                    <path d="M38.5 56.5c0-2.5 2-4.5 4.5-4.5h42c2.5 0 4.5 2 4.5 4.5v15c0 2.5-2 4.5-4.5 4.5H43c-2.5 0-4.5-2-4.5-4.5v-15z" fill="#fff"/>
+                    <path d="M50 60h28M50 66h20" stroke="#00ADD8" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="64" cy="90" r="8" fill="#fff"/>
+                </svg>
+                <span class="godoc-card-title">pkg.go.dev/github.com/kzs0/bedrock</span>
+                <span class="godoc-card-desc">Browse the complete API documentation, type definitions, and source code on Go's official package registry.</span>
+                <span class="godoc-card-action">
+                    View Documentation
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06z"/>
+                    </svg>
+                </span>
+            </a>
 
             <div class="api-group">
                 <h3 class="api-group-title">Core Functions</h3>
