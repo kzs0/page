@@ -201,41 +201,33 @@
         <span class="footer-text">© 2025 kzs0</span>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js"></script>
+    <script src="../topology.js"></script>
     <script src="../main.js"></script>
     <script>
         // Track viewport dimensions to prevent mobile scroll resize resets
         var lastViewportWidth = window.innerWidth;
 
-        // Initialize Vanta.js topology background
-        function initVanta() {
-            if (window.vantaEffect) {
-                window.vantaEffect.destroy();
+        // Initialize custom topology background
+        function initTopology() {
+            if (window.topologyEffect) {
+                window.topologyEffect.destroy();
             }
-            if (window.VANTA && window.VANTA.TOPOLOGY) {
-                window.vantaEffect = VANTA.TOPOLOGY({
+            if (window.TOPOLOGY) {
+                window.topologyEffect = TOPOLOGY({
                     el: "#vanta-bg",
-                    mouseControls: false,
-                    touchControls: false,
-                    gyroControls: false,
-                    forceAnimate: true,
-                    minHeight: 200.00,
-                    minWidth: 200.00,
-                    scale: 1.00,
-                    scaleMobile: 1.00,
                     color: 0x3b82f6,
-                    backgroundColor: 0x0a0a0b
+                    backgroundColor: 0x0a0a0b,
+                    maxDistance: 200,
+                    spacing: 15,
+                    showDots: true
                 });
                 lastViewportWidth = window.innerWidth;
 
-                // Override Vanta's internal resize method to prevent mobile scroll flashing
-                // Vanta.js internally listens to resize events and redraws the canvas
-                // This causes flashing when mobile address bar hides/shows during scroll
-                if (window.vantaEffect) {
-                    var originalResize = window.vantaEffect.resize.bind(window.vantaEffect);
+                // Override resize method to prevent mobile scroll flashing
+                if (window.topologyEffect) {
+                    var originalResize = window.topologyEffect.resize.bind(window.topologyEffect);
                     var stableWidth = window.innerWidth;
-                    window.vantaEffect.resize = function() {
+                    window.topologyEffect.resize = function() {
                         var currentWidth = window.innerWidth;
                         // Only resize if width actually changed (not just height from address bar)
                         if (Math.abs(currentWidth - stableWidth) > 10) {
@@ -247,31 +239,30 @@
             }
         }
 
-        window.addEventListener('load', initVanta);
+        window.addEventListener('load', initTopology);
 
-        // Remove the resize listener - Vanta's overridden resize handles this now
-        // We keep a minimal one just for orientation changes
+        // Handle resize for orientation changes
         window.addEventListener('resize', function() {
             var currentWidth = window.innerWidth;
             if (Math.abs(currentWidth - lastViewportWidth) > 10) {
                 lastViewportWidth = currentWidth;
-                if (window.vantaEffect) {
-                    window.vantaEffect.resize();
+                if (window.topologyEffect) {
+                    window.topologyEffect.resize();
                 }
             }
         });
 
-        // Cleanup Vanta effect when leaving the page
+        // Cleanup effect when leaving the page
         window.addEventListener('beforeunload', function() {
-            if (window.vantaEffect) {
-                window.vantaEffect.destroy();
+            if (window.topologyEffect) {
+                window.topologyEffect.destroy();
             }
         });
 
-        // Replay animations and reinitialize Vanta when page is restored from bfcache
+        // Replay animations and reinitialize when page is restored from bfcache
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {
-                initVanta();
+                initTopology();
                 document.querySelectorAll('.blog-title, .blog-subtitle, .post-item').forEach(function(el) {
                     el.style.animation = 'none';
                     el.offsetHeight; // Trigger reflow
