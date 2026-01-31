@@ -1511,7 +1511,7 @@ cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js"></script>
     <script src="../main.js"></script>
     <script>
-        // Track viewport width to prevent mobile scroll resize resets
+        // Track viewport dimensions to prevent mobile scroll resize resets
         var lastViewportWidth = window.innerWidth;
 
         // Initialize Vanta.js topology background
@@ -1525,6 +1525,7 @@ cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
                     mouseControls: false,
                     touchControls: false,
                     gyroControls: false,
+                    forceAnimate: true,
                     minHeight: 200.00,
                     minWidth: 200.00,
                     scale: 1.00,
@@ -1533,12 +1534,29 @@ cfg := bedrock.<span class="function">MustFromEnv</span>()</code>
                     backgroundColor: 0x0a0a0b
                 });
                 lastViewportWidth = window.innerWidth;
+
+                // Override Vanta's internal resize method to prevent mobile scroll flashing
+                // Vanta.js internally listens to resize events and redraws the canvas
+                // This causes flashing when mobile address bar hides/shows during scroll
+                if (window.vantaEffect) {
+                    var originalResize = window.vantaEffect.resize.bind(window.vantaEffect);
+                    var stableWidth = window.innerWidth;
+                    window.vantaEffect.resize = function() {
+                        var currentWidth = window.innerWidth;
+                        // Only resize if width actually changed (not just height from address bar)
+                        if (Math.abs(currentWidth - stableWidth) > 10) {
+                            stableWidth = currentWidth;
+                            originalResize();
+                        }
+                    };
+                }
             }
         }
 
         window.addEventListener('load', initVanta);
 
-        // Handle resize only when width changes (ignore mobile address bar height changes)
+        // Remove the resize listener - Vanta's overridden resize handles this now
+        // We keep a minimal one just for orientation changes
         window.addEventListener('resize', function() {
             var currentWidth = window.innerWidth;
             if (Math.abs(currentWidth - lastViewportWidth) > 10) {
