@@ -35,23 +35,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Add nav background on scroll
+    // Optimized to only update when crossing threshold, not on every scroll
     const nav = document.querySelector('.nav');
-    let lastScroll = 0;
+    let navScrolled = false;
 
     window.addEventListener('scroll', () => {
         const currentScroll = window.pageYOffset;
+        const shouldBeScrolled = currentScroll > 100;
 
-        if (currentScroll > 100) {
-            nav.style.background = 'rgba(10, 10, 11, 0.9)';
-            nav.style.backdropFilter = 'blur(10px)';
-            nav.style.webkitBackdropFilter = 'blur(10px)';
-        } else {
-            nav.style.background = 'linear-gradient(to bottom, rgba(10, 10, 11, 1) 0%, transparent 100%)';
-            nav.style.backdropFilter = 'none';
-            nav.style.webkitBackdropFilter = 'none';
+        // Only update styles when state changes to avoid constant repaints
+        if (shouldBeScrolled !== navScrolled) {
+            navScrolled = shouldBeScrolled;
+            if (shouldBeScrolled) {
+                nav.style.background = 'rgba(10, 10, 11, 0.9)';
+                nav.style.backdropFilter = 'blur(10px)';
+                nav.style.webkitBackdropFilter = 'blur(10px)';
+            } else {
+                nav.style.background = 'linear-gradient(to bottom, rgba(10, 10, 11, 1) 0%, transparent 100%)';
+                nav.style.backdropFilter = 'none';
+                nav.style.webkitBackdropFilter = 'none';
+            }
         }
-
-        lastScroll = currentScroll;
     }, { passive: true });
 
     // Prefetch blog page on hover
