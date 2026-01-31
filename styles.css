@@ -368,4 +368,7 @@ body {
     /* Prevent mobile viewport height changes from affecting canvas */
     min-height: 100%;
     min-height: -webkit-fill-available;
+    /* Prevent touch/pointer events from reaching canvas - fixes mobile scroll flash */
+    pointer-events: none;
+    touch-action: none;
 }
