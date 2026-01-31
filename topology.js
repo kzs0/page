@@ -12,8 +12,8 @@
         color: 0x3b82f6,
         backgroundColor: 0x0a0a0b,
         points: 12,
-        maxDistance: 180,
-        spacing: 60,
+        maxDistance: 150,
+        spacing: 120,
         showDots: false
     };
 
@@ -41,13 +41,13 @@
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
 
-        // Phase for sinusoidal movement - slower, smoother animation
+        // Phase for sinusoidal movement - slow, smooth flowing animation
         this.phase = Math.random() * Math.PI * 2;
         this.phaseY = Math.random() * Math.PI * 2;
-        this.amplitude = 15 + Math.random() * 25;
-        this.amplitudeY = 15 + Math.random() * 25;
-        this.frequency = 0.0001 + Math.random() * 0.00015;
-        this.frequencyY = 0.00008 + Math.random() * 0.00012;
+        this.amplitude = 25 + Math.random() * 35;
+        this.amplitudeY = 25 + Math.random() * 35;
+        this.frequency = 0.00015 + Math.random() * 0.0001;
+        this.frequencyY = 0.0001 + Math.random() * 0.00008;
     }
 
     Point.prototype.update = function(time) {
@@ -188,7 +188,7 @@
         var maxDist = this.options.maxDistance;
         var maxDistSq = maxDist * maxDist;
 
-        this.ctx.lineWidth = 0.8;
+        this.ctx.lineWidth = 1;
         this.ctx.lineCap = 'round';
 
         for (var i = 0; i < this.points.length; i++) {
@@ -204,8 +204,8 @@
                 if (distSq < maxDistSq) {
                     var dist = Math.sqrt(distSq);
                     var opacity = 1 - (dist / maxDist);
-                    // Smooth cubic falloff for subtle lines
-                    opacity = opacity * opacity * opacity * 0.4;
+                    // Quadratic falloff for visible but subtle lines
+                    opacity = opacity * opacity * 0.6;
 
                     this.ctx.strokeStyle = rgbToCss(this.color, opacity);
                     this.ctx.beginPath();
