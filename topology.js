@@ -12,9 +12,9 @@
         color: 0x3b82f6,
         backgroundColor: 0x0a0a0b,
         points: 12,
-        maxDistance: 200,
-        spacing: 15,
-        showDots: true
+        maxDistance: 180,
+        spacing: 60,
+        showDots: false
     };
 
     // Convert hex number to CSS color
@@ -41,20 +41,19 @@
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
 
-        // Random velocity for organic movement
-        this.vx = (Math.random() - 0.5) * 0.3;
-        this.vy = (Math.random() - 0.5) * 0.3;
-
-        // Phase for sinusoidal movement
+        // Phase for sinusoidal movement - slower, smoother animation
         this.phase = Math.random() * Math.PI * 2;
-        this.amplitude = 20 + Math.random() * 30;
-        this.frequency = 0.0005 + Math.random() * 0.001;
+        this.phaseY = Math.random() * Math.PI * 2;
+        this.amplitude = 15 + Math.random() * 25;
+        this.amplitudeY = 15 + Math.random() * 25;
+        this.frequency = 0.0001 + Math.random() * 0.00015;
+        this.frequencyY = 0.00008 + Math.random() * 0.00012;
     }
 
     Point.prototype.update = function(time) {
-        // Sinusoidal movement around origin point
+        // Slow, smooth sinusoidal movement for flowing effect
         this.x = this.originX + Math.sin(time * this.frequency + this.phase) * this.amplitude;
-        this.y = this.originY + Math.cos(time * this.frequency * 0.8 + this.phase) * this.amplitude;
+        this.y = this.originY + Math.cos(time * this.frequencyY + this.phaseY) * this.amplitudeY;
     };
 
     // Main Topology class
@@ -135,11 +134,12 @@
         var cols = Math.ceil(this.width / spacing) + 1;
         var rows = Math.ceil(this.height / spacing) + 1;
 
-        // Create a grid of points with some randomness
+        // Create a grid of points with randomness for organic feel
         for (var i = 0; i < cols; i++) {
             for (var j = 0; j < rows; j++) {
-                var x = i * spacing + (Math.random() - 0.5) * spacing * 0.5;
-                var y = j * spacing + (Math.random() - 0.5) * spacing * 0.5;
+                // Add more variance to point positions for natural look
+                var x = i * spacing + (Math.random() - 0.5) * spacing * 0.7;
+                var y = j * spacing + (Math.random() - 0.5) * spacing * 0.7;
                 this.points.push(new Point(x, y, this.width, this.height));
             }
         }
@@ -188,7 +188,8 @@
         var maxDist = this.options.maxDistance;
         var maxDistSq = maxDist * maxDist;
 
-        this.ctx.lineWidth = 1;
+        this.ctx.lineWidth = 0.8;
+        this.ctx.lineCap = 'round';
 
         for (var i = 0; i < this.points.length; i++) {
             var p1 = this.points[i];
@@ -203,7 +204,8 @@
                 if (distSq < maxDistSq) {
                     var dist = Math.sqrt(distSq);
                     var opacity = 1 - (dist / maxDist);
-                    opacity = opacity * opacity * 0.5; // Quadratic falloff, max 0.5 opacity
+                    // Smooth cubic falloff for subtle lines
+                    opacity = opacity * opacity * opacity * 0.4;
 
                     this.ctx.strokeStyle = rgbToCss(this.color, opacity);
                     this.ctx.beginPath();
