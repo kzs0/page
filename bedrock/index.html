@@ -562,7 +562,7 @@
             <h1 class="docs-title">Bedrock<span class="version-badge">v0.3.2</span></h1>
             <p class="docs-subtitle">
                 An opinionated observability framework for Go that unifies tracing, metrics, profiling,
-                and structured logging. No globals &mdash; everything flows through <span class="inline-code">context.Context</span>.
+                and structured logging. No globals; everything flows through <span class="inline-code">context.Context</span>.
             </p>
             <div class="docs-links">
                 <a href="https://github.com/kzs0/bedrock" target="_blank" rel="noopener" class="docs-link">
@@ -731,7 +731,7 @@
             <h2 class="docs-section-title">Operations</h2>
             <p class="docs-text">
                 Operations are the primary unit of work in Bedrock. Each operation represents a discrete task
-                that you want to observe &mdash; an API request handler, a database query, a message processor, etc.
+                that you want to observe, like an API request handler, a database query, or a message processor.
             </p>
             <p class="docs-text">
                 When you create an operation, Bedrock automatically:
@@ -851,7 +851,7 @@ op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="str
         <section id="sources" class="docs-section">
             <h2 class="docs-section-title">Sources</h2>
             <p class="docs-text">
-                Sources represent long-running processes that spawn multiple operations over time &mdash; background workers,
+                Sources represent long-running processes that spawn multiple operations over time: background workers,
                 queue consumers, WebSocket handlers, or any persistent goroutine that processes work continuously.
             </p>
             <p class="docs-text">
@@ -898,9 +898,9 @@ op, ctx := bedrock.<span class="function">Operation</span>(ctx, <span class="str
                 Sources support three types of aggregate metrics:
             </p>
             <ul class="docs-list">
-                <li><span class="inline-code">attr.Sum(name, value)</span> &mdash; Cumulative counter (e.g., total items processed)</li>
-                <li><span class="inline-code">attr.Gauge(name, value)</span> &mdash; Point-in-time value (e.g., queue depth)</li>
-                <li><span class="inline-code">attr.Histogram(name, value)</span> &mdash; Distribution (e.g., batch sizes)</li>
+                <li><span class="inline-code">attr.Sum(name, value)</span> - Cumulative counter (e.g., total items processed)</li>
+                <li><span class="inline-code">attr.Gauge(name, value)</span> - Point-in-time value (e.g., queue depth)</li>
+                <li><span class="inline-code">attr.Histogram(name, value)</span> - Distribution (e.g., batch sizes)</li>
             </ul>
         </section>
 
@@ -985,11 +985,11 @@ http.<span class="function">ListenAndServe</span>(<span class="string">":8080"</
                 <strong>Auto-captured attributes:</strong>
             </p>
             <ul class="docs-list">
-                <li><span class="inline-code">http.method</span> &mdash; GET, POST, etc.</li>
-                <li><span class="inline-code">http.route</span> &mdash; The matched route pattern</li>
-                <li><span class="inline-code">http.scheme</span> &mdash; http or https</li>
-                <li><span class="inline-code">http.host</span> &mdash; The request host</li>
-                <li><span class="inline-code">http.status_code</span> &mdash; Response status code</li>
+                <li><span class="inline-code">http.method</span> - GET, POST, etc.</li>
+                <li><span class="inline-code">http.route</span> - The matched route pattern</li>
+                <li><span class="inline-code">http.scheme</span> - http or https</li>
+                <li><span class="inline-code">http.host</span> - The request host</li>
+                <li><span class="inline-code">http.status_code</span> - Response status code</li>
             </ul>
 
             <h3 class="docs-section-subtitle">Client Instrumentation</h3>
@@ -1024,8 +1024,8 @@ resp, err := bedrock.<span class="function">Do</span>(ctx, req)</code>
                 Trace context is automatically propagated via HTTP headers:
             </p>
             <ul class="docs-list">
-                <li><span class="inline-code">traceparent</span> &mdash; Contains trace ID, span ID, and flags</li>
-                <li><span class="inline-code">tracestate</span> &mdash; Vendor-specific trace data</li>
+                <li><span class="inline-code">traceparent</span> - Contains trace ID, span ID, and flags</li>
+                <li><span class="inline-code">tracestate</span> - Vendor-specific trace data</li>
             </ul>
 
             <div class="code-block">
