@@ -224,8 +224,14 @@ body {
 }
 
 .writing-link {
+    display: inline-flex;
+    align-items: center;
+    padding-bottom: 0.2rem;
     color: var(--text-primary);
-    font-size: 0.875rem;
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.8125rem;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
     text-decoration: none;
     border-bottom: 1px solid var(--border-hover);
 }
@@ -415,12 +421,12 @@ body {
     position: absolute;
     inset: 0;
     background: url('/topology-poster.jpg') center / cover no-repeat;
-    opacity: 0.6;
+    opacity: 0;
     transition: opacity 900ms ease;
 }
 
-#vanta-bg.has-live-effect::before {
-    opacity: 0;
+#vanta-bg.show-poster::before {
+    opacity: 0.6;
 }
 
 .vanta-surface {

@@ -5,7 +5,15 @@
 const initTopologyBackground = () => {
     const background = document.querySelector('#vanta-bg');
 
-    if (!background || !window.VANTA?.TOPOLOGY || !window.p5) {
+    if (!background) {
+        return;
+    }
+
+    const showPoster = () => background.classList.add('show-poster');
+    const hidePoster = () => background.classList.remove('show-poster');
+
+    if (!window.VANTA?.TOPOLOGY || !window.p5) {
+        showPoster();
         return;
     }
 
@@ -105,6 +113,10 @@ const initTopologyBackground = () => {
                     renderBounds = previous?.bounds || null;
                 }
                 destroyLayer(next);
+                if (!previous) {
+                    background.classList.remove('has-live-effect');
+                    showPoster();
+                }
                 return;
             }
 
@@ -119,6 +131,7 @@ const initTopologyBackground = () => {
                 if (next.destroyed) return;
 
                 layer.classList.add('is-visible');
+                hidePoster();
                 background.classList.add('has-live-effect');
 
                 if (previous) {
@@ -152,6 +165,7 @@ const initTopologyBackground = () => {
             active = null;
             renderBounds = null;
             background.classList.remove('has-live-effect');
+            showPoster();
             return;
         }
 
@@ -168,6 +182,7 @@ const initTopologyBackground = () => {
         active = null;
         renderBounds = null;
         background.classList.remove('has-live-effect');
+        hidePoster();
     };
 
     syncMotionPreference();
