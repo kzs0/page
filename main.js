@@ -121,15 +121,25 @@ const initTopologyBackground = () => {
         }
     };
 
+    const teardown = () => {
+        window.clearTimeout(resizeTimer);
+        window.removeEventListener('resize', checkBuffer);
+        reduceMotion.removeEventListener?.('change', syncMotionPreference);
+        destroyLayer(active);
+        active = null;
+        renderBounds = null;
+        background.classList.remove('has-live-effect');
+    };
+
     syncMotionPreference();
     window.addEventListener('resize', checkBuffer, { passive: true });
     reduceMotion.addEventListener?.('change', syncMotionPreference);
 
-    window.addEventListener('pagehide', () => {
-        window.clearTimeout(resizeTimer);
-        destroyLayer(active);
-        active = null;
-    }, { once: true });
+    window.addEventListener('pagehide', (event) => {
+        if (!event.persisted) {
+            teardown();
+        }
+    });
 };
 
 document.addEventListener('DOMContentLoaded', () => {
