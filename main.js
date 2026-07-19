@@ -1,8 +1,140 @@
 /**
- * Main JavaScript for site interactivity
+ * Main JavaScript for the background and light site interactions.
  */
 
+const initTopologyBackground = () => {
+    const background = document.querySelector('#vanta-bg');
+
+    if (!background || !window.VANTA?.TOPOLOGY || !window.p5) {
+        return;
+    }
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let active = null;
+    let renderBounds = null;
+    let resizeTimer = null;
+
+    const getRenderBounds = () => {
+        const availableWidth = Math.max(
+            window.screen?.availWidth || 0,
+            window.screen?.width || 0,
+            window.innerWidth
+        );
+        const availableHeight = Math.max(
+            window.screen?.availHeight || 0,
+            window.screen?.height || 0,
+            window.innerHeight
+        );
+        const overscan = window.innerWidth <= 768 ? 1.12 : 1.16;
+
+        return {
+            width: Math.ceil(availableWidth * overscan),
+            height: Math.ceil(availableHeight * overscan)
+        };
+    };
+
+    const destroyLayer = (layer) => {
+        if (!layer) return;
+
+        window.removeEventListener('resize', layer.effect.resize);
+        layer.effect.destroy();
+        layer.element.remove();
+    };
+
+    const buildLayer = () => {
+        const nextBounds = getRenderBounds();
+        const layer = document.createElement('div');
+        const previous = active;
+
+        layer.className = 'vanta-surface';
+        layer.style.width = `${nextBounds.width}px`;
+        layer.style.height = `${nextBounds.height}px`;
+        background.appendChild(layer);
+
+        const effect = window.VANTA.TOPOLOGY({
+            el: layer,
+            mouseControls: false,
+            touchControls: false,
+            gyroControls: false,
+            minHeight: nextBounds.height,
+            minWidth: nextBounds.width,
+            scale: 1,
+            scaleMobile: 1,
+            color: 0x3b82f6,
+            backgroundColor: 0x0a0a0b
+        });
+
+        // Vanta normally resizes its canvas on every viewport change. This
+        // surface is larger than the available display, so the browser can
+        // crop it without asking p5 to recreate the canvas.
+        window.removeEventListener('resize', effect.resize);
+
+        if (effect.p5?.pixelDensity) {
+            // The topology is an ambient texture, so a single device pixel is
+            // enough even on Retina screens and avoids an oversized backing
+            // canvas on mobile.
+            effect.p5.pixelDensity(1);
+            effect.resize();
+            window.removeEventListener('resize', effect.resize);
+        }
+
+        active = { element: layer, effect };
+        renderBounds = nextBounds;
+
+        window.requestAnimationFrame(() => {
+            layer.classList.add('is-visible');
+            background.classList.add('has-live-effect');
+        });
+
+        if (previous) {
+            previous.element.classList.remove('is-visible');
+            window.setTimeout(() => destroyLayer(previous), 950);
+        }
+    };
+
+    const checkBuffer = () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => {
+            if (!renderBounds || reduceMotion.matches) return;
+
+            const needsLargerSurface =
+                window.innerWidth > renderBounds.width * 0.92 ||
+                window.innerHeight > renderBounds.height * 0.92;
+
+            if (needsLargerSurface) {
+                buildLayer();
+            }
+        }, 500);
+    };
+
+    const syncMotionPreference = () => {
+        if (reduceMotion.matches) {
+            destroyLayer(active);
+            active = null;
+            renderBounds = null;
+            background.classList.remove('has-live-effect');
+            return;
+        }
+
+        if (!active) {
+            buildLayer();
+        }
+    };
+
+    syncMotionPreference();
+    window.addEventListener('resize', checkBuffer, { passive: true });
+    reduceMotion.addEventListener?.('change', syncMotionPreference);
+
+    window.addEventListener('pagehide', () => {
+        window.clearTimeout(resizeTimer);
+        destroyLayer(active);
+        active = null;
+    }, { once: true });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
+    initTopologyBackground();
+
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', (e) => {
@@ -33,30 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.work, .connect').forEach(section => {
         observer.observe(section);
     });
-
-    // Add nav background on scroll
-    // Optimized to only update when crossing threshold, not on every scroll
-    const nav = document.querySelector('.nav');
-    let navScrolled = false;
-
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        const shouldBeScrolled = currentScroll > 100;
-
-        // Only update styles when state changes to avoid constant repaints
-        if (shouldBeScrolled !== navScrolled) {
-            navScrolled = shouldBeScrolled;
-            if (shouldBeScrolled) {
-                nav.style.background = 'rgba(10, 10, 11, 0.9)';
-                nav.style.backdropFilter = 'blur(10px)';
-                nav.style.webkitBackdropFilter = 'blur(10px)';
-            } else {
-                nav.style.background = 'linear-gradient(to bottom, rgba(10, 10, 11, 1) 0%, transparent 100%)';
-                nav.style.backdropFilter = 'none';
-                nav.style.webkitBackdropFilter = 'none';
-            }
-        }
-    }, { passive: true });
 
     // Prefetch blog page on hover
     const blogLink = document.querySelector('a[href="/blog"]');

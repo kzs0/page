@@ -56,6 +56,13 @@ body {
     transition: opacity 0.2s ease;
 }
 
+.nav-alias {
+    margin-left: 0.55rem;
+    color: var(--text-tertiary);
+    font-size: 0.75rem;
+    font-weight: 400;
+}
+
 .nav-logo:hover {
     opacity: 0.7;
 }
@@ -96,7 +103,7 @@ body {
 }
 
 .hero-content {
-    max-width: 680px;
+    max-width: 720px;
 }
 
 .hero-label {
@@ -115,7 +122,14 @@ body {
     line-height: 1.15;
     letter-spacing: -0.03em;
     color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.hero-role {
     margin-bottom: 1.75rem;
+    color: var(--text-primary);
+    font-size: 1.125rem;
+    font-weight: 400;
 }
 
 .hero-description {
@@ -190,6 +204,41 @@ body {
     font-weight: 300;
     color: var(--text-secondary);
     line-height: 1.6;
+}
+
+/* Writing Section */
+.writing {
+    padding: 6rem 0;
+    border-top: 1px solid var(--border);
+}
+
+.writing-copy {
+    max-width: 620px;
+}
+
+.writing-title {
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+.writing-desc {
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.writing-link {
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-hover);
+}
+
+.writing-link:hover {
+    border-color: var(--accent);
 }
 
 /* Connect Section */
@@ -279,8 +328,13 @@ body {
     }
 
     .work,
+    .writing,
     .connect {
         padding: 4rem 0;
+    }
+
+    .nav-alias {
+        display: none;
     }
 
     .footer {
@@ -303,6 +357,7 @@ body {
 /* Hero elements with staggered entrance */
 .hero-label,
 .hero-title,
+.hero-role,
 .hero-description {
     animation: slideUpFadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
@@ -359,10 +414,48 @@ body {
 /* Vanta.js Background */
 #vanta-bg {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: var(--bg-primary);
+}
+
+#vanta-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/topology-poster.jpg') center / cover no-repeat;
     opacity: 0.6;
+    transition: opacity 900ms ease;
+}
+
+#vanta-bg.has-live-effect::before {
+    opacity: 0;
+}
+
+.vanta-surface {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 900ms ease;
+}
+
+.vanta-surface.is-visible {
+    opacity: 0.6;
+}
+
+.vanta-surface canvas {
+    display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
 }

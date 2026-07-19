@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog — kzs0</title>
+    <title>Writing — Kenzo Spaulding</title>
+    <meta name="description" content="Writing by Kenzo Spaulding about company building, 0-to-1 work, AI, infrastructure, and software engineering.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://kzs0.dev/blog/">
     <link rel="stylesheet" href="../styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -148,75 +151,36 @@
     </style>
 </head>
 <body>
-    <div id="vanta-bg"></div>
+    <div id="vanta-bg" aria-hidden="true"></div>
     <nav class="nav">
         <div class="nav-left">
-            <a href="/" class="nav-logo">kzs0</a>
+            <a href="/" class="nav-logo">Kenzo Spaulding <span class="nav-alias">kzs0</span></a>
         </div>
         <div class="nav-right">
-            <a href="/blog" class="nav-link" style="color: var(--text-primary);">Blog</a>
+            <a href="/blog" class="nav-link" style="color: var(--text-primary);">Writing</a>
             <a href="/bedrock" class="nav-link">Bedrock</a>
         </div>
     </nav>
 
     <main class="main">
         <header class="blog-header">
-            <h1 class="blog-title">Blog</h1>
-            <p class="blog-subtitle">Thoughts on systems, architecture, and engineering at scale.</p>
+            <h1 class="blog-title">Writing</h1>
+            <p class="blog-subtitle">Company building, going from 0 to 1, AI, and software engineering.</p>
         </header>
 
         <section class="posts">
-            <div class="posts-list">
-                <a href="#" class="post-item">
-                    <div class="post-meta">
-                        <span class="post-date">2025-01-15</span>
-                        <span class="post-tag">Lorem</span>
-                    </div>
-                    <h2 class="post-title">Lorem Ipsum Dolor Sit Amet</h2>
-                    <p class="post-excerpt">Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </a>
-
-                <a href="#" class="post-item">
-                    <div class="post-meta">
-                        <span class="post-date">2024-12-08</span>
-                        <span class="post-tag">Ipsum</span>
-                    </div>
-                    <h2 class="post-title">Ut Enim Ad Minim Veniam</h2>
-                    <p class="post-excerpt">Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                </a>
-
-                <a href="#" class="post-item">
-                    <div class="post-meta">
-                        <span class="post-date">2024-11-22</span>
-                        <span class="post-tag">Dolor</span>
-                    </div>
-                    <h2 class="post-title">Duis Aute Irure Dolor</h2>
-                    <p class="post-excerpt">In reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                </a>
+            <div class="empty-state">
+                <p class="empty-state-text">Nothing published yet. This will be the place for longer notes from the work.</p>
             </div>
         </section>
     </main>
 
     <footer class="footer">
-        <span class="footer-text">© 2025 kzs0</span>
+        <span class="footer-text">© 2026 Kenzo Spaulding · kzs0</span>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.topology.min.js"></script>
     <script src="../main.js"></script>
-    <script>
-        VANTA.TOPOLOGY({
-            el: "#vanta-bg",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0x3b82f6,
-            backgroundColor: 0x0a0a0b
-        });
-    </script>
 </body>
 </html>
