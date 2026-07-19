@@ -34,8 +34,12 @@ const initTopologyBackground = () => {
     };
 
     const destroyLayer = (layer) => {
-        if (!layer) return;
+        if (!layer || layer.destroyed) return;
 
+        layer.destroyed = true;
+        window.cancelAnimationFrame(layer.readyFrame);
+        window.clearTimeout(layer.revealTimer);
+        window.clearTimeout(layer.destroyTimer);
         window.removeEventListener('resize', layer.effect.resize);
         layer.effect.destroy();
         layer.element.remove();
@@ -69,27 +73,62 @@ const initTopologyBackground = () => {
         // crop it without asking p5 to recreate the canvas.
         window.removeEventListener('resize', effect.resize);
 
-        if (effect.p5?.pixelDensity) {
-            // The topology is an ambient texture, so a single device pixel is
-            // enough even on Retina screens and avoids an oversized backing
-            // canvas on mobile.
-            effect.p5.pixelDensity(1);
-            effect.resize();
-            window.removeEventListener('resize', effect.resize);
-        }
+        const next = {
+            element: layer,
+            effect,
+            bounds: nextBounds,
+            destroyed: false,
+            readyFrame: null,
+            revealTimer: null,
+            destroyTimer: null
+        };
 
-        active = { element: layer, effect };
+        active = next;
         renderBounds = nextBounds;
 
-        window.requestAnimationFrame(() => {
-            layer.classList.add('is-visible');
-            background.classList.add('has-live-effect');
-        });
+        const revealWhenReady = (attempt = 0) => {
+            if (next.destroyed) return;
 
-        if (previous) {
-            previous.element.classList.remove('is-visible');
-            window.setTimeout(() => destroyLayer(previous), 950);
-        }
+            const p5Instance = effect.p5;
+            const p5Ready = p5Instance &&
+                typeof p5Instance === 'object' &&
+                typeof p5Instance.pixelDensity === 'function';
+
+            if (!p5Ready) {
+                if (attempt < 120) {
+                    next.readyFrame = window.requestAnimationFrame(() => revealWhenReady(attempt + 1));
+                    return;
+                }
+
+                if (active === next) {
+                    active = previous || null;
+                    renderBounds = previous?.bounds || null;
+                }
+                destroyLayer(next);
+                return;
+            }
+
+            // Vanta exposes a boolean p5 placeholder before the actual p5
+            // instance is ready. Waiting for the instance makes this density
+            // correction reliable in Safari as well as Chromium.
+            p5Instance.pixelDensity(1);
+            effect.resize();
+            window.removeEventListener('resize', effect.resize);
+
+            next.revealTimer = window.setTimeout(() => {
+                if (next.destroyed) return;
+
+                layer.classList.add('is-visible');
+                background.classList.add('has-live-effect');
+
+                if (previous) {
+                    previous.element.classList.remove('is-visible');
+                    previous.destroyTimer = window.setTimeout(() => destroyLayer(previous), 950);
+                }
+            }, 200);
+        };
+
+        revealWhenReady();
     };
 
     const checkBuffer = () => {
