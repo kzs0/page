@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pyrock | Python Observability Library</title>
-    <meta name="description" content="pyrock is the zero-dependency Python port of Bedrock: traces, metrics, profiles, and structured logs built around operations.">
+    <title>Pyrock | Python Observability Library</title>
+    <meta name="description" content="Pyrock is the zero-dependency Python port of Bedrock: traces, metrics, profiles, and structured logs built around operations.">
     <meta name="author" content="Kenzo Spaulding">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#0a0a0b">
@@ -14,8 +14,8 @@
     <link rel="shortcut icon" href="/favicon.ico?v=20260726">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20260726">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="pyrock | Python Observability Library">
-    <meta property="og:description" content="pyrock is the zero-dependency Python port of Bedrock: traces, metrics, profiles, and structured logs built around operations.">
+    <meta property="og:title" content="Pyrock | Python Observability Library">
+    <meta property="og:description" content="Pyrock is the zero-dependency Python port of Bedrock: traces, metrics, profiles, and structured logs built around operations.">
     <meta property="og:image" content="https://kzs0.dev/og-v3.png">
     <meta property="og:image:alt" content="Kenzo Spaulding, AI Infrastructure, Platform Engineering, Developer Experience, Product Development, and Company Strategy">
     <meta property="og:image:width" content="1734">
@@ -23,8 +23,8 @@
     <meta property="og:url" content="https://kzs0.dev/pyrock/">
     <meta property="og:site_name" content="Kenzo Spaulding">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="pyrock | Python Observability Library">
-    <meta name="twitter:description" content="pyrock is the zero-dependency Python port of Bedrock: traces, metrics, profiles, and structured logs built around operations.">
+    <meta name="twitter:title" content="Pyrock | Python Observability Library">
+    <meta name="twitter:description" content="Pyrock is the zero-dependency Python port of Bedrock: traces, metrics, profiles, and structured logs built around operations.">
     <meta name="twitter:image" content="https://kzs0.dev/og-v3.png">
     <meta name="twitter:image:alt" content="Kenzo Spaulding, AI Infrastructure, Platform Engineering, Developer Experience, Product Development, and Company Strategy">
     <link rel="stylesheet" href="../styles.css?v=20261108">
@@ -42,14 +42,14 @@
         <div class="nav-right">
             <a href="/blog" class="nav-link">Writing</a>
             <a href="/bedrock" class="nav-link">Bedrock</a>
-            <a href="/pyrock" class="nav-link" style="color: var(--text-primary);">pyrock</a>
+            <a href="/pyrock" class="nav-link" style="color: var(--text-primary);">Pyrock</a>
         </div>
     </nav>
 
     <main class="main">
         <header class="docs-header">
             <p class="docs-label">Open Source</p>
-            <h1 class="docs-title">pyrock<span class="version-badge">v0.1.0</span></h1>
+            <h1 class="docs-title">Pyrock<span class="version-badge">v0.1.0</span></h1>
             <p class="docs-subtitle">
                 The Python port of <a href="/bedrock" style="color: var(--text-primary);">Bedrock</a>: opinionated observability for CPython
                 that unifies tracing, metrics, profiling, and structured logging around operations. Standard library only.
@@ -99,7 +99,7 @@
         <section id="overview" class="docs-section">
             <h2 class="docs-section-title">Overview</h2>
             <p class="docs-text">
-                pyrock brings Bedrock's model to CPython: every named unit of work is an <strong>operation</strong> that creates a span, records count, success, failure, and duration metrics, and correlates its logs. It uses only the standard library and has zero runtime dependencies.
+                Pyrock brings Bedrock's model to CPython: every named unit of work is an <strong>operation</strong> that creates a span, records count, success, failure, and duration metrics, and correlates its logs. It uses only the standard library and has zero runtime dependencies.
             </p>
             <p class="docs-text">
                 A Go service and a Python service behind the same collector produce the same metric names, label sets, span attributes, log shape, and <span class="inline-code">BEDROCK_*</span> configuration, so dashboards and alerts carry over between languages.
@@ -120,7 +120,7 @@
                 </div>
                 <div class="feature-item">
                     <h3 class="feature-title">Exceptions as Failures</h3>
-                    <p class="feature-desc">An exception escaping an operation marks it failed, registers error attributes, and is re-raised. pyrock never swallows exceptions.</p>
+                    <p class="feature-desc">An exception escaping an operation marks it failed, registers error attributes, and is re-raised. Pyrock never swallows exceptions.</p>
                 </div>
                 <div class="feature-item">
                     <h3 class="feature-title">WSGI and ASGI</h3>
@@ -140,7 +140,7 @@
                 </div>
                 <div class="feature-item">
                     <h3 class="feature-title">Testing Built In</h3>
-                    <p class="feature-desc">pyrock.testing captures spans, metrics, and logs in memory, with a pytest fixture registered automatically.</p>
+                    <p class="feature-desc"><span class="inline-code">pyrock.testing</span> captures spans, metrics, and logs in memory, with a pytest fixture registered automatically.</p>
                 </div>
             </div>
             <div class="callout">
@@ -303,7 +303,7 @@ app = <span class="function">Middleware</span>(app, bedrock=bedrock)          <s
             <ul class="docs-list">
                 <li><strong>asyncio</strong> needs nothing: tasks copy the context when created, and <span class="inline-code">asyncio.to_thread</span> copies it too.</li>
                 <li><strong>Threads</strong> start with an empty context on most interpreters, so carry it explicitly.</li>
-                <li><strong>Python 3.14t</strong> threads inherit the creator's context when the interpreter enables it, and pyrock follows that behavior.</li>
+                <li><strong>Python 3.14t</strong> threads inherit the creator's context when the interpreter enables it, and Pyrock follows that behavior.</li>
                 <li><strong>fork()</strong> resets queues and series in the child and restarts background threads. With gunicorn or uWSGI, call <span class="inline-code">pyrock.init()</span> in the post-fork hook.</li>
             </ul>
             <div class="code-block">
@@ -366,7 +366,7 @@ pyrock.<span class="function">inject_headers</span>(headers)   <span class="comm
         <section id="tracing" class="docs-section">
             <h2 class="docs-section-title">Distributed Tracing</h2>
             <p class="docs-text">
-                pyrock implements W3C Trace Context. <span class="inline-code">pyrock.trace.http.HTTPPropagator</span> reads and writes header mappings and ASGI header lists, and <span class="inline-code">pyrock.trace.w3c</span> has the parsing and formatting helpers. Any object with <span class="inline-code">extract(carrier)</span> and <span class="inline-code">inject(carrier, span_context=None)</span> is a propagator:
+                Pyrock implements W3C Trace Context. <span class="inline-code">pyrock.trace.http.HTTPPropagator</span> reads and writes header mappings and ASGI header lists, and <span class="inline-code">pyrock.trace.w3c</span> has the parsing and formatting helpers. Any object with <span class="inline-code">extract(carrier)</span> and <span class="inline-code">inject(carrier, span_context=None)</span> is a propagator:
             </p>
             <div class="code-block">
                 <code><span class="keyword">from</span> pyrock.trace <span class="keyword">import</span> SpanKind, w3c
@@ -406,7 +406,7 @@ pyrock.<span class="function">init</span>(trace_sampler=sampler.<span class="fun
         <section id="logging" class="docs-section">
             <h2 class="docs-section-title">Logging</h2>
             <p class="docs-text">
-                pyrock builds on stdlib <span class="inline-code">logging</span>. By default <span class="inline-code">init()</span> installs a JSON handler on the root logger, so existing loggers in your code and your libraries become structured and trace-correlated.
+                Pyrock builds on stdlib <span class="inline-code">logging</span>. By default <span class="inline-code">init()</span> installs a JSON handler on the root logger, so existing loggers in your code and your libraries become structured and trace-correlated.
             </p>
             <div class="code-block">
                 <code>log = logging.<span class="function">getLogger</span>(__name__)
@@ -422,7 +422,7 @@ pyrock.<span class="function">error</span>(<span class="string">&quot;job failed
  &quot;trace_id&quot;:&quot;0af7651916cd43dd8448eb211c80319c&quot;,&quot;span_id&quot;:&quot;b7ad6b7169203331&quot;}</code>
             </div>
             <ul class="docs-list">
-                <li><span class="inline-code">log_install=&quot;pyrock&quot;</span> configures only the pyrock logger, for apps where Django <span class="inline-code">LOGGING</span> or <span class="inline-code">dictConfig</span> owns logging.</li>
+                <li><span class="inline-code">log_install=&quot;pyrock&quot;</span> configures only the <span class="inline-code">pyrock</span> logger, for apps where Django <span class="inline-code">LOGGING</span> or <span class="inline-code">dictConfig</span> owns logging.</li>
                 <li><span class="inline-code">log_canonical=True</span> emits one <span class="inline-code">operation.complete</span> record per operation.</li>
                 <li><span class="inline-code">log_format=&quot;text&quot;</span> gives a human-readable line instead of JSON.</li>
             </ul>
@@ -485,7 +485,7 @@ latency = pyrock.<span class="function">histogram</span>(<span class="string">&q
     <span class="keyword">assert</span> t.logs.<span class="function">find</span>(msg=<span class="string">&quot;processing request&quot;</span>)[<span class="string">&quot;trace_id&quot;</span>] == op.trace_id</code>
             </div>
             <p class="docs-text">
-                Under pytest, the <span class="inline-code">pyrock_capture</span> fixture is registered through an entry point; pyrock never imports pytest itself.
+                Under pytest, the <span class="inline-code">pyrock_capture</span> fixture is registered through an entry point; Pyrock never imports pytest itself.
             </p>
         </section>
 
@@ -625,7 +625,7 @@ pyrock.<span class="function">init</span>(data_policy=privacy.<span class="funct
         <section id="profiles" class="docs-section">
             <h2 class="docs-section-title">Profiles</h2>
             <p class="docs-text">
-                Python has no runtime pprof, so pyrock builds each profile type from stdlib pieces and encodes it natively as OTLP Profiles (the same v0.2.0 schema as Bedrock) and as pprof <span class="inline-code">profile.proto</span>.
+                Python has no runtime pprof, so Pyrock builds each profile type from stdlib pieces and encodes it natively as OTLP Profiles (the same v0.2.0 schema as Bedrock) and as pprof <span class="inline-code">profile.proto</span>.
             </p>
             <div class="config-table-wrapper" style="overflow-x: auto;">
                 <table class="config-table">
@@ -651,7 +651,7 @@ pyrock.<span class="function">init</span>(data_policy=privacy.<span class="funct
                         </tr>
                         <tr>
                             <td>MUTEX / BLOCK</td>
-                            <td>Waits on pyrock's instrumented Lock, RLock, Condition, and Semaphore</td>
+                            <td>Waits on Pyrock's instrumented Lock, RLock, Condition, and Semaphore</td>
                         </tr>
                     </tbody>
                 </table>
@@ -684,12 +684,12 @@ pyrock.<span class="function">init</span>(profiles=<span class="function">Profil
         <section id="differences" class="docs-section">
             <h2 class="docs-section-title">Differences from Go Bedrock</h2>
             <p class="docs-text">
-                pyrock keeps Bedrock's concepts, wire formats, and names. It differs on purpose in a few places:
+                Pyrock keeps Bedrock's concepts, wire formats, and names. It differs on purpose in a few places:
             </p>
             <div class="config-table-wrapper" style="overflow-x: auto;">
                 <table class="config-table">
                     <thead>
-                        <tr><th>Area</th><th>Go Bedrock</th><th>pyrock</th></tr>
+                        <tr><th>Area</th><th>Go Bedrock</th><th>Pyrock</th></tr>
                     </thead>
                     <tbody>
                         <tr>
