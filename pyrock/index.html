@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pyrock | Python Observability Library</title>
+    <meta name="description" content="pyrock is the zero-dependency Python port of Bedrock: traces, metrics, profiles, and structured logs built around operations.">
+    <meta name="author" content="Kenzo Spaulding">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0a0a0b">
+    <link rel="canonical" href="https://kzs0.dev/pyrock/">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=20260726">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=20260726">
+    <link rel="shortcut icon" href="/favicon.ico?v=20260726">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20260726">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="pyrock | Python Observability Library">
+    <meta property="og:description" content="pyrock is the zero-dependency Python port of Bedrock: traces, metrics, profiles, and structured logs built around operations.">
+    <meta property="og:image" content="https://kzs0.dev/og-v3.png">
+    <meta property="og:image:alt" content="Kenzo Spaulding, AI Infrastructure, Platform Engineering, Developer Experience, Product Development, and Company Strategy">
+    <meta property="og:image:width" content="1734">
+    <meta property="og:image:height" content="907">
+    <meta property="og:url" content="https://kzs0.dev/pyrock/">
+    <meta property="og:site_name" content="Kenzo Spaulding">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="pyrock | Python Observability Library">
+    <meta name="twitter:description" content="pyrock is the zero-dependency Python port of Bedrock: traces, metrics, profiles, and structured logs built around operations.">
+    <meta name="twitter:image" content="https://kzs0.dev/og-v3.png">
+    <meta name="twitter:image:alt" content="Kenzo Spaulding, AI Infrastructure, Platform Engineering, Developer Experience, Product Development, and Company Strategy">
+    <link rel="stylesheet" href="../styles.css?v=20261108">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../docs.css?v=20261108">
+</head>
+<body>
+    <div id="vanta-bg" aria-hidden="true"></div>
+    <nav class="nav">
+        <div class="nav-left">
+            <a href="/" class="nav-logo">kzs0</a>
+        </div>
+        <div class="nav-right">
+            <a href="/blog" class="nav-link">Writing</a>
+            <a href="/bedrock" class="nav-link">Bedrock</a>
+            <a href="/pyrock" class="nav-link" style="color: var(--text-primary);">pyrock</a>
+        </div>
+    </nav>
+
+    <main class="main">
+        <header class="docs-header">
+            <p class="docs-label">Open Source</p>
+            <h1 class="docs-title">pyrock<span class="version-badge">v0.1.0</span></h1>
+            <p class="docs-subtitle">
+                The Python port of <a href="/bedrock" style="color: var(--text-primary);">Bedrock</a>: opinionated observability for CPython
+                that unifies tracing, metrics, profiling, and structured logging around operations. Standard library only.
+            </p>
+            <div class="docs-links">
+                <a href="https://github.com/kzs0/pyrock" target="_blank" rel="noopener" class="docs-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+                <a href="https://pypi.org/project/pyrock-core/" target="_blank" rel="noopener" class="docs-link">
+                    PyPI
+                </a>
+                <a href="https://github.com/kzs0/pyrock/blob/main/CHANGELOG.md" target="_blank" rel="noopener" class="docs-link">
+                    Changelog
+                </a>
+                <a href="/bedrock" class="docs-link">
+                    Go library: Bedrock
+                </a>
+            </div>
+        </header>
+
+        <!-- Table of Contents -->
+        <nav class="toc">
+            <h2 class="toc-title">Contents</h2>
+            <ul class="toc-list">
+                <li><a href="#overview" class="toc-link">Overview</a></li>
+                <li><a href="#installation" class="toc-link">Installation</a></li>
+                <li><a href="#quickstart" class="toc-link">Quick Start</a></li>
+                <li><a href="#operations" class="toc-link">Operations</a></li>
+                <li><a href="#steps" class="toc-link">Steps</a></li>
+                <li><a href="#sources" class="toc-link">Sources</a></li>
+                <li><a href="#context" class="toc-link">Context and Threads</a></li>
+                <li><a href="#http" class="toc-link">HTTP Instrumentation</a></li>
+                <li><a href="#tracing" class="toc-link">Distributed Tracing</a></li>
+                <li><a href="#logging" class="toc-link">Logging</a></li>
+                <li><a href="#metrics" class="toc-link">Metrics</a></li>
+                <li><a href="#testing" class="toc-link">Testing</a></li>
+                <li><a href="#configuration" class="toc-link">Configuration</a></li>
+                <li><a href="#privacy" class="toc-link">Privacy and Server</a></li>
+                <li><a href="#profiles" class="toc-link">Profiles</a></li>
+                <li><a href="#differences" class="toc-link">Differences from Go</a></li>
+                <li><a href="#compatibility" class="toc-link">Compatibility</a></li>
+            </ul>
+        </nav>
+
+        <!-- Overview -->
+        <section id="overview" class="docs-section">
+            <h2 class="docs-section-title">Overview</h2>
+            <p class="docs-text">
+                pyrock brings Bedrock's model to CPython: every named unit of work is an <strong>operation</strong> that creates a span, records count, success, failure, and duration metrics, and correlates its logs. It uses only the standard library and has zero runtime dependencies.
+            </p>
+            <p class="docs-text">
+                A Go service and a Python service behind the same collector produce the same metric names, label sets, span attributes, log shape, and <span class="inline-code">BEDROCK_*</span> configuration, so dashboards and alerts carry over between languages.
+            </p>
+            <div class="code-block">
+                <code><span class="keyword">import</span> pyrock
+
+<span class="keyword">with</span> pyrock.<span class="function">init</span>(service=<span class="string">&quot;users-api&quot;</span>):
+    <span class="keyword">with</span> pyrock.<span class="function">operation</span>(<span class="string">&quot;process_user&quot;</span>, attrs={<span class="string">&quot;user_id&quot;</span>: <span class="string">&quot;123&quot;</span>},
+                          metric_labels=[<span class="string">&quot;status&quot;</span>]) <span class="keyword">as</span> op:
+        op.<span class="function">register</span>(status=<span class="string">&quot;active&quot;</span>)
+        <span class="function">do_work</span>()  <span class="comment"># an exception escaping here marks the operation as failed</span></code>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3 class="feature-title">Pythonic API</h3>
+                    <p class="feature-desc">Context managers and decorators for functions, coroutines, generators, and async generators. Keyword attributes, no context argument.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Exceptions as Failures</h3>
+                    <p class="feature-desc">An exception escaping an operation marks it failed, registers error attributes, and is re-raised. pyrock never swallows exceptions.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">WSGI and ASGI</h3>
+                    <p class="feature-desc">Middleware for Flask, Django, FastAPI, Starlette, and more, built on protocol interfaces rather than frameworks.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">asyncio and Threads</h3>
+                    <p class="feature-desc">State lives in contextvars. Helpers carry context into threads and pools, and the free-threaded 3.14t build is supported.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">OTLP Traces and Profiles</h3>
+                    <p class="feature-desc">Traces over OTLP HTTP/JSON or gRPC, and CPU, wall, heap, and thread profiles encoded natively as OTLP Profiles.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Prometheus Metrics</h3>
+                    <p class="feature-desc">Automatic operation metrics, custom counters, gauges, and histograms, and Python runtime and process metrics.</p>
+                </div>
+                <div class="feature-item">
+                    <h3 class="feature-title">Testing Built In</h3>
+                    <p class="feature-desc">pyrock.testing captures spans, metrics, and logs in memory, with a pytest fixture registered automatically.</p>
+                </div>
+            </div>
+            <div class="callout">
+                <p class="callout-title">Status</p>
+                <p class="callout-text">
+                    Alpha (<span class="inline-code">0.1.0</span>). Minor versions may change behavior until 1.0, and every change is recorded in the <a href="https://github.com/kzs0/pyrock/blob/main/CHANGELOG.md" target="_blank" rel="noopener" style="color: var(--accent);">changelog</a> with a migration note.
+                </p>
+            </div>
+        </section>
+
+        <!-- Installation -->
+        <section id="installation" class="docs-section">
+            <h2 class="docs-section-title">Installation</h2>
+            <p class="docs-text">
+                Install from PyPI. The distribution is <span class="inline-code">pyrock-core</span>; the package you import is <span class="inline-code">pyrock</span>.
+            </p>
+            <div class="code-block">
+                <code>pip install pyrock-core</code>
+            </div>
+            <ul class="docs-list">
+                <li>CPython 3.11 or newer, including the free-threaded build (3.14t). Every shared structure is lock-guarded; nothing relies on the GIL.</li>
+                <li>Zero runtime dependencies. The wheel is pure Python.</li>
+                <li><span class="inline-code">import pyrock</span> is cheap: profiling, cloud wiring, gRPC, the server, the HTTP client, and the middleware load on first use.</li>
+            </ul>
+        </section>
+
+        <!-- Quick Start -->
+        <section id="quickstart" class="docs-section">
+            <h2 class="docs-section-title">Quick Start</h2>
+
+            <h3 class="docs-section-subtitle">A WSGI service (Flask, Django, Falcon, Pyramid)</h3>
+            <div class="code-block">
+                <code><span class="keyword">import</span> pyrock
+<span class="keyword">from</span> pyrock.wsgi <span class="keyword">import</span> Middleware
+
+pyrock.<span class="function">init</span>(service=<span class="string">&quot;billing&quot;</span>)   <span class="comment"># reads BEDROCK_* first; keywords override</span>
+app = <span class="function">Middleware</span>(app)            <span class="comment"># Flask: app.wsgi_app = Middleware(app.wsgi_app)</span></code>
+            </div>
+
+            <h3 class="docs-section-subtitle">An ASGI service (FastAPI, Starlette, Litestar)</h3>
+            <div class="code-block">
+                <code><span class="keyword">import</span> pyrock
+<span class="keyword">from</span> pyrock.asgi <span class="keyword">import</span> Middleware
+
+bedrock = pyrock.<span class="function">Bedrock</span>(service=<span class="string">&quot;users-api&quot;</span>)   <span class="comment"># live, not activated</span>
+app = <span class="function">Middleware</span>(app, bedrock=bedrock)          <span class="comment"># FastAPI: app.add_middleware(Middleware, bedrock=bedrock)</span>
+<span class="comment"># On shutdown: await bedrock.ashutdown(), or use the Bedrock as the lifespan context manager.</span></code>
+            </div>
+            <p class="docs-text">
+                Each request becomes a server operation named <span class="inline-code">http.request</span>, with the metrics <span class="inline-code">http_request_count</span>, <span class="inline-code">_successes</span>, <span class="inline-code">_failures</span>, and <span class="inline-code">_duration_ms</span> labelled by <span class="inline-code">http_method</span>, <span class="inline-code">http_route</span>, and <span class="inline-code">http_status_code</span>. Incoming <span class="inline-code">traceparent</span> and <span class="inline-code">tracestate</span> headers continue the caller's trace.
+            </p>
+
+            <h3 class="docs-section-subtitle">Operations in your code</h3>
+            <div class="code-block">
+                <code><span class="keyword">import</span> pyrock
+
+<span class="function">@</span><span class="function">pyrock</span>.<span class="function">operation</span>(<span class="string">&quot;get_user&quot;</span>, metric_labels=[<span class="string">&quot;tier&quot;</span>])
+<span class="keyword">def</span> <span class="function">get_user</span>(user_id: str) -&gt; User:
+    user = db.<span class="function">load</span>(user_id)
+    pyrock.<span class="function">register</span>(tier=user.tier)              <span class="comment"># on the innermost operation or step</span>
+    pyrock.<span class="function">info</span>(<span class="string">&quot;user loaded&quot;</span>, user_id=user_id)  <span class="comment"># carries trace_id/span_id</span>
+    <span class="keyword">return</span> user</code>
+            </div>
+        </section>
+
+        <!-- Operations -->
+        <section id="operations" class="docs-section">
+            <h2 class="docs-section-title">Operations</h2>
+            <p class="docs-text">
+                An operation is the main unit of instrumentation. Each one creates a span, records four metrics, accepts attributes, and succeeds unless something marks it failed. Use it as a context manager or as a decorator.
+            </p>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <p class="metric-name">{name}_count</p>
+                    <p class="metric-desc">Total number of operations</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">{name}_successes</p>
+                    <p class="metric-desc">Operations that completed successfully</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">{name}_failures</p>
+                    <p class="metric-desc">Operations that failed</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">{name}_duration_ms</p>
+                    <p class="metric-desc">Histogram of durations in milliseconds</p>
+                </div>
+            </div>
+            <p class="docs-text">
+                Metric families use the base name with dots turned into underscores: <span class="inline-code">http.request</span> gives <span class="inline-code">http_request_count</span>.
+            </p>
+            <div class="code-block">
+                <code><span class="keyword">with</span> pyrock.<span class="function">operation</span>(<span class="string">&quot;process_user&quot;</span>, attrs={<span class="string">&quot;user_id&quot;</span>: uid}, metric_labels=[<span class="string">&quot;status&quot;</span>]) <span class="keyword">as</span> op:
+    op.<span class="function">register</span>(status=<span class="string">&quot;active&quot;</span>)             <span class="comment"># keyword attributes</span>
+    op.<span class="function">register</span>({<span class="string">&quot;user.tier&quot;</span>: <span class="string">&quot;gold&quot;</span>})       <span class="comment"># a mapping for dotted keys</span>
+    op.<span class="function">event</span>(<span class="string">&quot;cache_miss&quot;</span>, key=<span class="string">&quot;u:123&quot;</span>)      <span class="comment"># a span event, recorded immediately</span>
+    <span class="keyword">if</span> <span class="keyword">not</span> valid:
+        op.<span class="function">fail</span>(<span class="function">ValueError</span>(<span class="string">&quot;bad user&quot;</span>))      <span class="comment"># a handled failure; no raise needed</span></code>
+            </div>
+            <p class="docs-text">
+                Operations also have <span class="inline-code">succeed()</span> (clear an earlier failure, for retry loops), <span class="inline-code">end(error=..., success=...)</span>, and <span class="inline-code">done()</span>. For callbacks that can't use <span class="inline-code">with</span>, <span class="inline-code">pyrock.start_operation(...)</span> starts one without activating it.
+            </p>
+
+            <h3 class="docs-section-subtitle">Success by default, and exceptions</h3>
+            <ul class="docs-list">
+                <li><strong>No exception:</strong> success, unless <span class="inline-code">fail()</span> was called.</li>
+                <li><strong>An Exception escapes:</strong> failure. <span class="inline-code">error</span>, <span class="inline-code">error.type</span>, <span class="inline-code">error.fingerprint</span>, and <span class="inline-code">error.chain</span> are registered and the exception is re-raised.</li>
+                <li><strong><span class="inline-code">expected=(KeyError, ...)</span>:</strong> listed exceptions are recorded as a span event and leave the outcome a success.</li>
+                <li><strong>BaseException:</strong> <span class="inline-code">asyncio.CancelledError</span> and <span class="inline-code">KeyboardInterrupt</span> are failures; <span class="inline-code">GeneratorExit</span> and <span class="inline-code">SystemExit(0)</span> are not.</li>
+                <li><strong>ExceptionGroup:</strong> a failure, summarised in <span class="inline-code">error.group.count</span> and <span class="inline-code">error.types</span>.</li>
+            </ul>
+
+            <h3 class="docs-section-subtitle">Metric labels and no_trace</h3>
+            <p class="docs-text">
+                Only keys declared in <span class="inline-code">metric_labels=</span> become metric labels; a declared label with no value is <span class="inline-code">_</span>. Request IDs and user IDs are safe as attributes because they never turn into series. <span class="inline-code">no_trace=True</span> turns off spans for a scope and everything beneath it while still recording metrics.
+            </p>
+        </section>
+
+        <!-- Steps -->
+        <section id="steps" class="docs-section">
+            <h2 class="docs-section-title">Steps</h2>
+            <p class="docs-text">
+                Steps are lightweight spans for helper functions. Their attributes go to the parent operation, and they record no metrics of their own.
+            </p>
+            <div class="code-block">
+                <code><span class="function">@</span><span class="function">pyrock</span>.<span class="function">step</span>(<span class="string">&quot;parse_payload&quot;</span>)
+<span class="keyword">def</span> <span class="function">parse</span>(raw: bytes) -&gt; Payload:
+    pyrock.<span class="function">register</span>(bytes=<span class="function">len</span>(raw))   <span class="comment"># on the step span and on the parent operation</span>
+    ...</code>
+            </div>
+            <p class="docs-text">
+                An exception escaping a step marks the step span as an error. The operation fails only if the exception also escapes the operation. Repeated names under one parent are numbered in span names (<span class="inline-code">fetch[1]</span>, <span class="inline-code">fetch[2]</span>); metric names never change.
+            </p>
+        </section>
+
+        <!-- Sources -->
+        <section id="sources" class="docs-section">
+            <h2 class="docs-section-title">Sources</h2>
+            <p class="docs-text">
+                Sources represent long-running processes. They prefix the names of operations opened beneath them, share their attributes and labels, and record aggregate metrics.
+            </p>
+            <div class="code-block">
+                <code><span class="keyword">with</span> pyrock.<span class="function">source</span>(<span class="string">&quot;background.worker&quot;</span>, attrs={<span class="string">&quot;worker.type&quot;</span>: <span class="string">&quot;async&quot;</span>},
+                   metric_labels=[<span class="string">&quot;worker.type&quot;</span>]) <span class="keyword">as</span> src:
+    src.<span class="function">sum</span>(<span class="string">&quot;jobs_processed&quot;</span>, <span class="number">1</span>)            <span class="comment"># counter   background_worker_jobs_processed</span>
+    src.<span class="function">gauge</span>(<span class="string">&quot;queue_depth&quot;</span>, q.<span class="function">qsize</span>())     <span class="comment"># gauge     background_worker_queue_depth</span>
+    src.<span class="function">histogram</span>(<span class="string">&quot;latency_ms&quot;</span>, <span class="number">52.3</span>)       <span class="comment"># histogram background_worker_latency_ms</span>
+    <span class="keyword">with</span> pyrock.<span class="function">operation</span>(<span class="string">&quot;process&quot;</span>):       <span class="comment"># named background.worker.process</span>
+        ...</code>
+            </div>
+        </section>
+
+        <!-- Context, asyncio, and Threads -->
+        <section id="context" class="docs-section">
+            <h2 class="docs-section-title">Context, asyncio, and Threads</h2>
+            <p class="docs-text">
+                There is no process-wide default instance. The active instance, operation, step, source, and the <span class="inline-code">no_trace</span> flag live in <span class="inline-code">contextvars</span>.
+            </p>
+            <ul class="docs-list">
+                <li><strong>asyncio</strong> needs nothing: tasks copy the context when created, and <span class="inline-code">asyncio.to_thread</span> copies it too.</li>
+                <li><strong>Threads</strong> start with an empty context on most interpreters, so carry it explicitly.</li>
+                <li><strong>Python 3.14t</strong> threads inherit the creator's context when the interpreter enables it, and pyrock follows that behavior.</li>
+                <li><strong>fork()</strong> resets queues and series in the child and restarts background threads. With gunicorn or uWSGI, call <span class="inline-code">pyrock.init()</span> in the post-fork hook.</li>
+            </ul>
+            <div class="code-block">
+                <code>pool.<span class="function">submit</span>(pyrock.<span class="function">bind</span>(process, item))           <span class="comment"># wrap one callable</span>
+
+<span class="keyword">with</span> pyrock.<span class="function">ContextThreadPoolExecutor</span>(max_workers=<span class="number">8</span>) <span class="keyword">as</span> pool:
+    pool.<span class="function">map</span>(process, items)                      <span class="comment"># copies context on every submit</span>
+
+pyrock.<span class="function">Thread</span>(target=consume).<span class="function">start</span>()             <span class="comment"># a threading.Thread that copies context</span></code>
+            </div>
+
+            <h3 class="docs-section-subtitle">Lifecycle and noop</h3>
+            <p class="docs-text">
+                <span class="inline-code">pyrock.init(...)</span> builds, starts, and activates an instance; it is a sync and async context manager that shuts down cleanly on exit. Without <span class="inline-code">with</span>, call <span class="inline-code">bedrock.shutdown(timeout=30)</span> or <span class="inline-code">await bedrock.ashutdown()</span>. When no instance is active, every helper returns a preallocated noop, so library code can instrument freely; the noop path costs one ContextVar lookup.
+            </p>
+        </section>
+
+        <!-- HTTP Instrumentation -->
+        <section id="http" class="docs-section">
+            <h2 class="docs-section-title">HTTP Instrumentation</h2>
+
+            <h3 class="docs-section-subtitle">Server middleware</h3>
+            <p class="docs-text">
+                The WSGI and ASGI middlewares take the same options:
+            </p>
+            <div class="code-block">
+                <code><span class="function">Middleware</span>(app,
+    operation_name=<span class="string">&quot;http.request&quot;</span>,
+    additional_labels=[<span class="string">&quot;user_type&quot;</span>],
+    additional_attrs=<span class="keyword">lambda</span> environ: {<span class="string">&quot;user_type&quot;</span>: environ.<span class="function">get</span>(<span class="string">&quot;HTTP_X_USER_TYPE&quot;</span>, <span class="string">&quot;&quot;</span>)},
+    success_codes=<span class="function">range</span>(<span class="number">200</span>, <span class="number">400</span>),         <span class="comment"># default: every status below 400</span>
+    trace_propagation=<span class="keyword">True</span>,
+    route=<span class="keyword">lambda</span> environ: environ.<span class="function">get</span>(<span class="string">&quot;pyrock.route&quot;</span>),
+)</code>
+            </div>
+            <ul class="docs-list">
+                <li>Default attributes: <span class="inline-code">http.method</span>, <span class="inline-code">http.route</span>, <span class="inline-code">http.scheme</span>, <span class="inline-code">http.host</span>, <span class="inline-code">http.status_code</span>.</li>
+                <li><span class="inline-code">http.route</span> is always a template or <span class="inline-code">_</span>, never a raw path. FastAPI route templates are picked up automatically; recipes cover Flask and Django.</li>
+                <li>Duration runs until the response body finishes, so streaming responses are timed correctly.</li>
+                <li>ASGI passes <span class="inline-code">lifespan</span> through, and <span class="inline-code">websocket=True</span> covers each websocket connection as one operation.</li>
+                <li><span class="inline-code">pyrock.http.instrument_http_server(MyHandler)</span> traces a stdlib <span class="inline-code">BaseHTTPRequestHandler</span>.</li>
+            </ul>
+
+            <h3 class="docs-section-subtitle">Client</h3>
+            <div class="code-block">
+                <code><span class="keyword">import</span> pyrock.http
+
+resp = pyrock.http.<span class="function">get</span>(<span class="string">&quot;https://api.example.com/users&quot;</span>)   <span class="comment"># a CLIENT span &quot;HTTP GET&quot;</span>
+resp = pyrock.http.<span class="function">post</span>(url, json={<span class="string">&quot;name&quot;</span>: <span class="string">&quot;a&quot;</span>}, timeout=<span class="number">10</span>)
+resp = pyrock.http.<span class="function">request</span>(<span class="string">&quot;PUT&quot;</span>, url, data=body, headers={<span class="string">&quot;Authorization&quot;</span>: <span class="string">f&quot;</span><span class="string">Bearer </span>{tok}<span class="string">&quot;</span>})
+
+pyrock.<span class="function">inject_headers</span>(headers)   <span class="comment"># traceparent/tracestate for httpx, requests, or anything else</span></code>
+            </div>
+            <p class="docs-text">
+                Client spans record method, host, scheme, and status; 4xx and 5xx responses set error status. URLs never keep credentials, query strings, or fragments. Copy-in recipes for httpx, requests, and gRPC interceptors live in <span class="inline-code">examples/recipes/</span>.
+            </p>
+        </section>
+
+        <!-- Distributed Tracing -->
+        <section id="tracing" class="docs-section">
+            <h2 class="docs-section-title">Distributed Tracing</h2>
+            <p class="docs-text">
+                pyrock implements W3C Trace Context. <span class="inline-code">pyrock.trace.http.HTTPPropagator</span> reads and writes header mappings and ASGI header lists, and <span class="inline-code">pyrock.trace.w3c</span> has the parsing and formatting helpers. Any object with <span class="inline-code">extract(carrier)</span> and <span class="inline-code">inject(carrier, span_context=None)</span> is a propagator:
+            </p>
+            <div class="code-block">
+                <code><span class="keyword">from</span> pyrock.trace <span class="keyword">import</span> SpanKind, w3c
+
+<span class="keyword">class</span> KafkaPropagator:
+    <span class="keyword">def</span> <span class="function">extract</span>(self, headers):
+        <span class="keyword">for</span> key, value <span class="keyword">in</span> headers:
+            <span class="keyword">if</span> key == <span class="string">&quot;traceparent&quot;</span>:
+                <span class="keyword">try</span>:
+                    <span class="keyword">return</span> w3c.<span class="function">span_context_from_traceparent</span>(value.<span class="function">decode</span>())
+                <span class="keyword">except</span> w3c.InvalidTraceparent:
+                    <span class="keyword">return</span> <span class="keyword">None</span>
+        <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="keyword">def</span> <span class="function">inject</span>(self, headers, span_context=<span class="keyword">None</span>):
+        sc = span_context <span class="keyword">or</span> pyrock.<span class="function">current_span_context</span>()
+        <span class="keyword">if</span> sc <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:
+            headers.<span class="function">append</span>((<span class="string">&quot;traceparent&quot;</span>, w3c.<span class="function">format_traceparent</span>(sc).<span class="function">encode</span>()))
+
+<span class="keyword">with</span> pyrock.<span class="function">operation</span>(<span class="string">&quot;consume&quot;</span>, kind=SpanKind.CONSUMER,
+                      remote_parent=<span class="function">KafkaPropagator</span>().<span class="function">extract</span>(msg.headers)):
+    ...</code>
+            </div>
+
+            <h3 class="docs-section-subtitle">Sampling</h3>
+            <div class="code-block">
+                <code><span class="keyword">from</span> pyrock.trace <span class="keyword">import</span> sampler
+
+pyrock.<span class="function">init</span>(trace_sampler=sampler.<span class="function">ParentBased</span>(sampler.<span class="function">Ratio</span>(<span class="number">0.1</span>)))</code>
+            </div>
+            <p class="docs-text">
+                <span class="inline-code">AlwaysOn</span>, <span class="inline-code">AlwaysOff</span>, <span class="inline-code">Ratio(r)</span>, and <span class="inline-code">ParentBased(root)</span>. <span class="inline-code">Ratio</span> is deterministic on the trace ID, so every service makes the same decision for a trace. Sampling controls export, not span creation.
+            </p>
+        </section>
+
+        <!-- Logging -->
+        <section id="logging" class="docs-section">
+            <h2 class="docs-section-title">Logging</h2>
+            <p class="docs-text">
+                pyrock builds on stdlib <span class="inline-code">logging</span>. By default <span class="inline-code">init()</span> installs a JSON handler on the root logger, so existing loggers in your code and your libraries become structured and trace-correlated.
+            </p>
+            <div class="code-block">
+                <code>log = logging.<span class="function">getLogger</span>(__name__)
+log.<span class="function">info</span>(<span class="string">&quot;user loaded&quot;</span>, extra={<span class="string">&quot;user.id&quot;</span>: uid})   <span class="comment"># extra keys become fields</span>
+
+pyrock.<span class="function">info</span>(<span class="string">&quot;processing request&quot;</span>, user_id=<span class="string">&quot;123&quot;</span>)
+pyrock.<span class="function">warning</span>(<span class="string">&quot;slow upstream&quot;</span>, timeout=<span class="function">timedelta</span>(seconds=<span class="number">5</span>))
+pyrock.<span class="function">error</span>(<span class="string">&quot;job failed&quot;</span>, exc)                    <span class="comment"># a positional exception: error.* fields</span></code>
+            </div>
+            <div class="code-block">
+                <span class="code-label">Output</span><code>{&quot;time&quot;:&quot;2026-11-05T12:00:00.123Z&quot;,&quot;level&quot;:&quot;INFO&quot;,&quot;msg&quot;:&quot;processing request&quot;,
+ &quot;service&quot;:&quot;users-api&quot;,&quot;user_id&quot;:&quot;123&quot;,
+ &quot;trace_id&quot;:&quot;0af7651916cd43dd8448eb211c80319c&quot;,&quot;span_id&quot;:&quot;b7ad6b7169203331&quot;}</code>
+            </div>
+            <ul class="docs-list">
+                <li><span class="inline-code">log_install=&quot;pyrock&quot;</span> configures only the pyrock logger, for apps where Django <span class="inline-code">LOGGING</span> or <span class="inline-code">dictConfig</span> owns logging.</li>
+                <li><span class="inline-code">log_canonical=True</span> emits one <span class="inline-code">operation.complete</span> record per operation.</li>
+                <li><span class="inline-code">log_format=&quot;text&quot;</span> gives a human-readable line instead of JSON.</li>
+            </ul>
+        </section>
+
+        <!-- Metrics -->
+        <section id="metrics" class="docs-section">
+            <h2 class="docs-section-title">Metrics</h2>
+            <div class="code-block">
+                <code>requests = pyrock.<span class="function">counter</span>(<span class="string">&quot;api_requests_total&quot;</span>, <span class="string">&quot;Total API requests&quot;</span>, labels=[<span class="string">&quot;endpoint&quot;</span>, <span class="string">&quot;method&quot;</span>])
+requests.<span class="function">labels</span>(endpoint=<span class="string">&quot;/users&quot;</span>, method=<span class="string">&quot;GET&quot;</span>).<span class="function">inc</span>()
+
+depth = pyrock.<span class="function">gauge</span>(<span class="string">&quot;queue_depth&quot;</span>, <span class="string">&quot;Current depth&quot;</span>, labels=[<span class="string">&quot;queue_name&quot;</span>])
+depth.<span class="function">labels</span>(queue_name=<span class="string">&quot;jobs&quot;</span>).<span class="function">set</span>(<span class="number">42</span>)
+
+latency = pyrock.<span class="function">histogram</span>(<span class="string">&quot;query_latency_ms&quot;</span>, <span class="string">&quot;Query latency&quot;</span>, labels=[<span class="string">&quot;db_type&quot;</span>])
+<span class="keyword">with</span> latency.<span class="function">labels</span>(db_type=<span class="string">&quot;pg&quot;</span>).<span class="function">time</span>():    <span class="comment"># milliseconds; also usable as a decorator</span>
+    <span class="function">run_query</span>()</code>
+            </div>
+            <p class="docs-text">
+                Static labels are added automatically. An undeclared label key raises <span class="inline-code">ValueError</span>, and re-registering a name with a different schema raises <span class="inline-code">MetricConflictError</span>. Series and family limits default to 1,000 each.
+            </p>
+            <p class="docs-text">
+                With runtime metrics enabled (the default), each scrape also reports Python and process metrics:
+            </p>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <p class="metric-name">python_gc_collections_total</p>
+                    <p class="metric-desc">GC collections by generation</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">python_threads</p>
+                    <p class="metric-desc">Active threads</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">python_asyncio_tasks</p>
+                    <p class="metric-desc">Tasks on tracked event loops</p>
+                </div>
+                <div class="metric-item">
+                    <p class="metric-name">process_resident_memory_bytes</p>
+                    <p class="metric-desc">Resident memory</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testing -->
+        <section id="testing" class="docs-section">
+            <h2 class="docs-section-title">Testing</h2>
+            <div class="code-block">
+                <code><span class="keyword">from</span> pyrock.testing <span class="keyword">import</span> capture
+
+<span class="keyword">def</span> <span class="function">test_process_user</span>():
+    <span class="keyword">with</span> <span class="function">capture</span>(service=<span class="string">&quot;test&quot;</span>) <span class="keyword">as</span> t:   <span class="comment"># in memory: no server, no detection, no network</span>
+        <span class="function">process_user</span>(<span class="string">&quot;123&quot;</span>)
+
+    op = t.spans.<span class="function">one</span>(name=<span class="string">&quot;process_user&quot;</span>)
+    <span class="keyword">assert</span> op.attrs[<span class="string">&quot;user_id&quot;</span>] == <span class="string">&quot;123&quot;</span>
+    <span class="keyword">assert</span> <span class="keyword">not</span> op.failed
+    <span class="keyword">assert</span> t.metrics.<span class="function">value</span>(<span class="string">&quot;process_user_count&quot;</span>, status=<span class="string">&quot;active&quot;</span>) == <span class="number">1</span>
+    <span class="keyword">assert</span> t.logs.<span class="function">find</span>(msg=<span class="string">&quot;processing request&quot;</span>)[<span class="string">&quot;trace_id&quot;</span>] == op.trace_id</code>
+            </div>
+            <p class="docs-text">
+                Under pytest, the <span class="inline-code">pyrock_capture</span> fixture is registered through an entry point; pyrock never imports pytest itself.
+            </p>
+        </section>
+
+        <!-- Configuration -->
+        <section id="configuration" class="docs-section">
+            <h2 class="docs-section-title">Configuration</h2>
+            <p class="docs-text">
+                <span class="inline-code">pyrock.init()</span> builds its <span class="inline-code">Config</span> from <span class="inline-code">BEDROCK_*</span> environment variables, then applies keyword overrides and validates. Invalid values raise <span class="inline-code">pyrock.ConfigError</span> listing every problem without echoing values. Durations keep Go's syntax in the environment (10s, 500ms, 1m30s).
+            </p>
+            <div class="code-block">
+                <code>pyrock.<span class="function">init</span>(service=<span class="string">&quot;users-api&quot;</span>, log_level=<span class="string">&quot;debug&quot;</span>,
+            static_attrs={<span class="string">&quot;env&quot;</span>: <span class="string">&quot;production&quot;</span>, <span class="string">&quot;version&quot;</span>: <span class="string">&quot;1.2.3&quot;</span>})
+
+cfg = pyrock.Config.<span class="function">from_env</span>().<span class="function">replace</span>(metric_prefix=<span class="string">&quot;myapp&quot;</span>, log_canonical=<span class="keyword">True</span>)
+pyrock.<span class="function">init</span>(cfg, static_attrs={<span class="string">&quot;region&quot;</span>: <span class="string">&quot;us-west-2&quot;</span>})</code>
+            </div>
+            <div class="config-table-wrapper" style="overflow-x: auto;">
+                <table class="config-table">
+                    <thead>
+                        <tr><th>Variable</th><th>Config field</th><th>Default</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BEDROCK_SERVICE</td>
+                            <td><code>service</code></td>
+                            <td><code>unknown</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_TRACE_URL</td>
+                            <td><code>trace_url</code></td>
+                            <td><code>None (no export)</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_TRACE_PROTOCOL</td>
+                            <td><code>trace_protocol</code></td>
+                            <td><code>auto</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_TRACE_SAMPLE_RATE</td>
+                            <td><code>trace_sample_rate</code></td>
+                            <td><code>1.0</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_LOG_LEVEL</td>
+                            <td><code>log_level</code></td>
+                            <td><code>INFO</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_LOG_FORMAT</td>
+                            <td><code>log_format</code></td>
+                            <td><code>json</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_LOG_CANONICAL</td>
+                            <td><code>log_canonical</code></td>
+                            <td><code>False</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_LOG_INSTALL</td>
+                            <td><code>log_install</code> (Python only)</td>
+                            <td><code>root</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_METRIC_PREFIX</td>
+                            <td><code>metric_prefix</code></td>
+                            <td><code>""</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_METRIC_BUCKETS</td>
+                            <td><code>metric_buckets</code></td>
+                            <td><code>0.5 … 1000</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_RUNTIME_METRICS</td>
+                            <td><code>runtime_metrics</code></td>
+                            <td><code>True</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_SERVER_ENABLED</td>
+                            <td><code>server_enabled</code></td>
+                            <td><code>True</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_SERVER_ADDR</td>
+                            <td><code>server_addr</code></td>
+                            <td><code>127.0.0.1:9090</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_SERVER_PPROF</td>
+                            <td><code>server_pprof</code></td>
+                            <td><code>False</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_SERVER_MAX_CONNECTIONS</td>
+                            <td><code>server_max_connections</code> (Python only)</td>
+                            <td><code>64</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_DISABLE_ENVIRONMENT_DETECTION</td>
+                            <td><code>disable_environment_detection</code></td>
+                            <td><code>False</code></td>
+                        </tr>
+                        <tr>
+                            <td>BEDROCK_SHUTDOWN_TIMEOUT</td>
+                            <td><code>shutdown_timeout</code></td>
+                            <td><code>30s</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="docs-text">
+                The server timeouts and header limits match Bedrock. <span class="inline-code">pyrock.env.parse(MyConfig)</span> reads your own dataclasses the same way.
+            </p>
+        </section>
+
+        <!-- Privacy and Server -->
+        <section id="privacy" class="docs-section">
+            <h2 class="docs-section-title">Privacy and Server</h2>
+            <p class="docs-text">
+                Telemetry defaults are conservative, as in Go. <span class="inline-code">pyrock.privacy.Policy</span> is enforced on span attributes, events, log records, metric labels, and profile labels: sensitive keys are redacted, error messages and stacks stay private, raw paths and user agents are emitted only when allowlisted, and host, process, and container identifiers are dropped unless allowed.
+            </p>
+            <div class="code-block">
+                <code><span class="keyword">from</span> pyrock <span class="keyword">import</span> privacy
+
+pyrock.<span class="function">init</span>(data_policy=privacy.<span class="function">Policy</span>(
+    resource_keys=[<span class="string">&quot;host.name&quot;</span>],
+    allow_error_details=<span class="keyword">False</span>,
+    redact=<span class="keyword">lambda</span> path, value: (value, <span class="keyword">True</span>),
+))</code>
+            </div>
+            <p class="docs-text">
+                The observability server starts on <span class="inline-code">127.0.0.1:9090</span> with <span class="inline-code">/metrics</span>, <span class="inline-code">/health</span>, and <span class="inline-code">/ready</span>. It shares Bedrock's security defaults (Slowloris deadline, timeouts, header limit) and caps concurrent connections at 64. pprof requires both a flag and an explicitly passed handler.
+            </p>
+        </section>
+
+        <!-- Profiles -->
+        <section id="profiles" class="docs-section">
+            <h2 class="docs-section-title">Profiles</h2>
+            <p class="docs-text">
+                Python has no runtime pprof, so pyrock builds each profile type from stdlib pieces and encodes it natively as OTLP Profiles (the same v0.2.0 schema as Bedrock) and as pprof <span class="inline-code">profile.proto</span>.
+            </p>
+            <div class="config-table-wrapper" style="overflow-x: auto;">
+                <table class="config-table">
+                    <thead>
+                        <tr><th>Type</th><th>Implementation</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CPU</td>
+                            <td>100 Hz sampler over thread frames, keeping threads whose CPU clock advanced</td>
+                        </tr>
+                        <tr>
+                            <td>WALL</td>
+                            <td>The same sampler without the CPU filter, for I/O-bound code (Python only)</td>
+                        </tr>
+                        <tr>
+                            <td>HEAP</td>
+                            <td>tracemalloc snapshot diffs</td>
+                        </tr>
+                        <tr>
+                            <td>THREADS</td>
+                            <td>Stacks of every thread plus pending asyncio tasks (alias GOROUTINE)</td>
+                        </tr>
+                        <tr>
+                            <td>MUTEX / BLOCK</td>
+                            <td>Waits on pyrock's instrumented Lock, RLock, Condition, and Semaphore</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="code-block">
+                <code><span class="keyword">from</span> pyrock.profile <span class="keyword">import</span> ProfileExportConfig, ProfileType
+
+pyrock.<span class="function">init</span>(profiles=<span class="function">ProfileExportConfig</span>(
+    endpoint=<span class="string">&quot;https://collector.example/v1/profiles&quot;</span>,
+    headers={<span class="string">&quot;Authorization&quot;</span>: <span class="string">f&quot;</span><span class="string">Bearer </span>{token}<span class="string">&quot;</span>},
+    types=(ProfileType.CPU, ProfileType.HEAP),
+    interval=<span class="number">60.0</span>,
+    cpu_sample_duration=<span class="number">10.0</span>,
+))</code>
+            </div>
+            <p class="docs-text">
+                The debug handler <span class="inline-code">pyrock.profile.debug.app()</span> serves gzipped pprof that works with <span class="inline-code">go tool pprof</span> and Pyroscope.
+            </p>
+
+            <h3 class="docs-section-subtitle">Cloud backend</h3>
+            <div class="code-block">
+                <code>pyrock.<span class="function">init</span>(cloud=pyrock.<span class="function">cloud</span>(<span class="string">&quot;brk_live_abc123&quot;</span>))</code>
+            </div>
+            <p class="docs-text">
+                The same wiring as Go's <span class="inline-code">WithCloud</span>: traces over OTLP/gRPC with retries and fan-out to a local collector, metrics pushed every 15 seconds, and profiles every 60 seconds.
+            </p>
+        </section>
+
+        <!-- Differences from Go Bedrock -->
+        <section id="differences" class="docs-section">
+            <h2 class="docs-section-title">Differences from Go Bedrock</h2>
+            <p class="docs-text">
+                pyrock keeps Bedrock's concepts, wire formats, and names. It differs on purpose in a few places:
+            </p>
+            <div class="config-table-wrapper" style="overflow-x: auto;">
+                <table class="config-table">
+                    <thead>
+                        <tr><th>Area</th><th>Go Bedrock</th><th>pyrock</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>API shape</td>
+                            <td><code>op, ctx := Operation(ctx, ...)</code>, <code>attr.String(...)</code></td>
+                            <td>Context managers, decorators, plain values, keyword arguments</td>
+                        </tr>
+                        <tr>
+                            <td>Failures</td>
+                            <td><code>op.Register(ctx, attr.Error(err))</code></td>
+                            <td>Escaping exceptions, or <code>op.fail(exc)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Context</td>
+                            <td><code>context.Context</code> argument</td>
+                            <td><code>contextvars</code>; no context argument</td>
+                        </tr>
+                        <tr>
+                            <td>Ratio sampling</td>
+                            <td>Random per span</td>
+                            <td>Deterministic on the trace ID</td>
+                        </tr>
+                        <tr>
+                            <td>Counters</td>
+                            <td>Ignore negative and NaN increments</td>
+                            <td>Raise <code>ValueError</code></td>
+                        </tr>
+                        <tr>
+                            <td>Profiles</td>
+                            <td>CPU, heap, goroutine, mutex, block</td>
+                            <td>Adds WALL; THREADS stands in for goroutine</td>
+                        </tr>
+                        <tr>
+                            <td>WebSockets</td>
+                            <td>Not covered</td>
+                            <td>One operation per connection (ASGI, opt-in)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Compatibility -->
+        <section id="compatibility" class="docs-section">
+            <h2 class="docs-section-title">Compatibility</h2>
+            <div class="config-table-wrapper" style="overflow-x: auto;">
+                <table class="config-table">
+                    <thead>
+                        <tr><th>Python</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>3.11, 3.12, 3.13, 3.14</td>
+                            <td>Supported and tested in CI</td>
+                        </tr>
+                        <tr>
+                            <td>3.14t (free-threaded)</td>
+                            <td>Supported and tested with <code>PYTHON_GIL=0</code>, including a stress job</td>
+                        </tr>
+                        <tr>
+                            <td>3.15 (pre-release)</td>
+                            <td>Tested in CI</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="docs-text">
+                Linux runs the full matrix; macOS and Windows run the suite on 3.14. CPython only.
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <span class="footer-text">&copy; 2026 Kenzo Spaulding · kzs0</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.topology.min.js"></script>
+    <script src="../main.js?v=20260719-2"></script>
+    <script>
+        // Smooth scroll for table of contents
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    history.pushState(null, null, link.getAttribute('href'));
+                }
+            });
+        });
+    </script>
+</body>
+</html>

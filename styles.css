@@ -199,6 +199,18 @@ body {
     line-height: 1.6;
 }
 
+.work-link {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-hover);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s ease;
+}
+
+.work-link:hover {
+    text-decoration-color: var(--text-primary);
+}
+
 /* Writing Section */
 .writing {
     padding: 6rem 0;

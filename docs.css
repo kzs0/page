@@ -1,0 +1,536 @@
+/* Shared styles for project documentation pages (/bedrock, /pyrock) */
+
+.docs-header {
+    padding: 6rem 0 4rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.docs-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+}
+
+.docs-title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.75rem;
+}
+
+.docs-subtitle {
+    font-size: 1.0625rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    max-width: 640px;
+    line-height: 1.7;
+}
+
+.docs-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.docs-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    text-decoration: none;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.docs-link:hover {
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+    background: var(--bg-tertiary);
+}
+
+.docs-link svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.version-badge {
+    display: inline-block;
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: var(--accent-muted);
+    padding: 0.25rem 0.625rem;
+    border-radius: 4px;
+    margin-left: 0.75rem;
+    vertical-align: middle;
+}
+
+/* Table of Contents */
+.toc {
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.toc-title {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.25rem;
+}
+
+.toc-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.5rem 2rem;
+    list-style: none;
+}
+
+.toc-link {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: block;
+    padding: 0.25rem 0;
+}
+
+.toc-link:hover {
+    color: var(--accent);
+}
+
+/* Docs Sections */
+.docs-section {
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.docs-section:last-child {
+    border-bottom: none;
+}
+
+.docs-section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+}
+
+.docs-section-subtitle {
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 2.5rem 0 1rem;
+    color: var(--text-primary);
+}
+
+.docs-text {
+    font-size: 0.9375rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    max-width: 720px;
+}
+
+.docs-text + .docs-text {
+    margin-top: 1rem;
+}
+
+.docs-text strong {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.docs-list {
+    list-style: none;
+    margin: 1rem 0;
+}
+
+.docs-list li {
+    font-size: 0.9375rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    padding-left: 1.25rem;
+    position: relative;
+}
+
+.docs-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--text-tertiary);
+}
+
+/* Code Blocks */
+.code-block {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+}
+
+.code-block code {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
+    line-height: 1.7;
+    white-space: pre;
+    display: block;
+}
+
+.code-block .comment {
+    color: var(--text-tertiary);
+}
+
+.code-block .keyword {
+    color: #c678dd;
+}
+
+.code-block .string {
+    color: #98c379;
+}
+
+.code-block .function {
+    color: #61afef;
+}
+
+.code-block .type {
+    color: #e5c07b;
+}
+
+.code-block .number {
+    color: #d19a66;
+}
+
+.code-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.inline-code {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.8125rem;
+    background: var(--bg-secondary);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    overflow-wrap: anywhere;
+}
+
+/* Feature Grid */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.feature-item {
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.feature-title {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+}
+
+.feature-desc {
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* API Reference */
+.api-group {
+    margin: 2rem 0;
+}
+
+.api-group-title {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.api-item {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.api-item:last-child {
+    border-bottom: none;
+}
+
+.api-signature {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
+    margin-bottom: 0.625rem;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.api-desc {
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Config Table */
+.config-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+}
+
+.config-table th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--text-primary);
+    padding: 0.75rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+}
+
+.config-table td {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    vertical-align: top;
+}
+
+.config-table td:first-child {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.config-table code {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem;
+    background: var(--bg-tertiary);
+    padding: 0.125rem 0.375rem;
+    border-radius: 3px;
+}
+
+/* Callout */
+.callout {
+    background: var(--accent-muted);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.callout-title {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.callout-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Metrics Table */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.metric-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+}
+
+.metric-name {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
+    margin-bottom: 0.375rem;
+}
+
+.metric-desc {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+}
+
+/* Godoc Link Card */
+.godoc-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.godoc-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.godoc-card-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1.5rem;
+}
+
+.godoc-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.godoc-card-desc {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 400px;
+}
+
+.godoc-card-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--accent);
+    color: white;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    transition: background 0.2s ease;
+}
+
+.godoc-card:hover .godoc-card-action {
+    background: var(--accent-hover);
+}
+
+.godoc-link {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .docs-header {
+        padding: 5rem 0 3rem;
+    }
+
+    .docs-links {
+        flex-direction: column;
+    }
+
+    .docs-section {
+        padding: 3rem 0;
+    }
+
+    .config-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .toc-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Slide-up fade-in animations */
+.docs-label,
+.docs-title,
+.docs-subtitle {
+    animation: slideUpFadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.docs-label {
+    animation-delay: 0.2s;
+}
+
+.docs-title {
+    animation-delay: 0.4s;
+}
+
+.docs-subtitle {
+    animation-delay: 0.6s;
+}
+
+.docs-link {
+    animation: slideUpFadeIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.docs-link:nth-child(1) { animation-delay: 0.7s; }
+.docs-link:nth-child(2) { animation-delay: 0.85s; }
+.docs-link:nth-child(3) { animation-delay: 1s; }
+
+.toc {
+    animation: slideUpFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation-delay: 0.3s;
+}
+
+.docs-section {
+    animation: slideUpFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation-delay: 0.2s;
+}
+
+.feature-item {
+    animation: slideUpFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.feature-item:nth-child(1) { animation-delay: 0.3s; }
+.feature-item:nth-child(2) { animation-delay: 0.4s; }
+.feature-item:nth-child(3) { animation-delay: 0.5s; }
+.feature-item:nth-child(4) { animation-delay: 0.6s; }
+.feature-item:nth-child(5) { animation-delay: 0.7s; }
+.feature-item:nth-child(6) { animation-delay: 0.8s; }
+.feature-item:nth-child(7) { animation-delay: 0.9s; }
